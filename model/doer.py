@@ -6,17 +6,25 @@ from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_
 from seqeval.metrics import classification_report, performance_measure
 import tensorflow as tf
 import numpy as np
-
+from gensim.models.fasttext import FastText
 from keras_contrib.layers import crf
 
 class Coextractor(object):    
     def __init__(self, config):
         self.model = None
         self.config = config
+        self.feature = None
+
+        self.general_embedding = FastText.load(config.general_embedding_model)
+        self.general_unknown = np.zeros(config.dim_general)
+
+        self.domain_embedding = FastText.load(config.domain_embedding_model)
+        self.domain_unknown = np.zeros(config.dim_domain)
 
         input = layers.Input(shape=(None, config.dim_general + config.dim_domain))
         
         # first RNN layer
+        #TODO REGU CELL
         if config.rnn_cell == 'lstm':
             first_ate_rnn = layers.Bidirectional(layers.LSTM(unit=config.hidden_size,
                                                     recurrent_activation='sigmoid',
@@ -47,7 +55,7 @@ class Coextractor(object):
         first_ate_dropout = layers.Dropout(dropout_rate)(first_ate_rnn)
         first_asc_dropout = layers.Dropout(dropout_rate)(first_asc_rnn)
 
-        # cross shared unit
+        #TODO cross shared unit
 
         # second RNN layer
         if config.rnn_cell == 'lstm':
@@ -83,4 +91,35 @@ class Coextractor(object):
         # interface layer
         ate_crf = CRF(config.n_aspect_tags)
         asc_crf = CRF(config.n_polarity_tags)
+
+    def get_double_embedding(self, tokens, max_len=None):
+        result = []
+        for token in tokens:
+            try:
+                general_embedding = self.general_embedding.wv[token]
+            except:
+                general_embedding = self.general_unknown
+
+            try:
+                domain_embedding = self.domain_embedding.wv[token]
+            except:
+                domain_embedding = self.domain_unknown
+
+            result.append(np.concatenate((general_embedding, domain_embedding)))
+
+        if max_len != None:
+            for i in range(len(tokens), max_len):
+                result.append(np.concatenate((self.general_unknown, self.domain_unknown)))
+
+        return np.asarray(result)
+
+    def get_features(self, X, max_len=None):
+        features = []
+        for i in range(len(X)):
+            if max_len is not None:
+                features.append(self.get_double_embedding(X[i], max_len))
+            else
+                features.append(np.asarray([self.get_double_embedding(X[i])]))
         
+        return features
+    
