@@ -3,8 +3,7 @@ from keras.layers import Layer
 import numpy as np
 
 class CrossSharedUnit(Layer):
-    def __init__(self, output_dim, config, **kwargs):
-        self.output_dim = output_dim
+    def __init__(self, config, **kwargs):
         self.config = config
         super(CrossSharedUnit, self).__init__(**kwargs)
 

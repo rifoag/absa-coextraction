@@ -9,6 +9,8 @@ import numpy as np
 from gensim.models.fasttext import FastText
 from keras_contrib.layers import crf
 
+from csu import CrossSharedUnit
+
 class Coextractor(object):    
     def __init__(self, config):
         self.model = None
@@ -55,7 +57,7 @@ class Coextractor(object):
         first_ate_dropout = layers.Dropout(dropout_rate)(first_ate_rnn)
         first_asc_dropout = layers.Dropout(dropout_rate)(first_asc_rnn)
 
-        #TODO cross shared unit
+        csu = CrossSharedUnit(config=self.config)(first_ate_dropout, first_asc_dropout)
 
         # second RNN layer
         if config.rnn_cell == 'lstm':
