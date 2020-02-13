@@ -2,7 +2,7 @@ from keras import backend as K
 from keras.layers import Layer
 
 class ReguCell(Layer):
-    def __init__(self, hidden_size, initializer=None, activation=K.math.tanh, **kwargs):
+    def __init__(self, hidden_size, **kwargs):
         self.hidden_size = hidden_size
 
         super(ReguCell, self).__init__(**kwargs)

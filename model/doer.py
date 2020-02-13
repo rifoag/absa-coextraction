@@ -10,6 +10,7 @@ from gensim.models.fasttext import FastText
 from keras_contrib.layers import crf
 
 from csu import CrossSharedUnit
+from regu_cell import ReguCell
 
 class Coextractor(object):    
     def __init__(self, config):
@@ -26,7 +27,9 @@ class Coextractor(object):
         input = layers.Input(shape=(None, config.dim_general + config.dim_domain))
         
         # first RNN layer
-        #TODO REGU CELL
+        if config.rnn_cell == 'regu':
+            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=config.hidden_size))(input)
+            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=config.hidden_size))(input)
         if config.rnn_cell == 'lstm':
             first_ate_rnn = layers.Bidirectional(layers.LSTM(unit=config.hidden_size,
                                                     recurrent_activation='sigmoid',
