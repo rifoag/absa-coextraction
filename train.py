@@ -15,7 +15,7 @@ def config_from_args(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    
+
     parser.add_argument('--train_data', default='dataset/train.txt')
     parser.add_argument('--test_data', default='dataset/test.txt')
 
