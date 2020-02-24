@@ -19,8 +19,8 @@ if __name__ == "__main__":
     parser.add_argument('--train_data', default='dataset/train.txt')
     parser.add_argument('--test_data', default='dataset/test.txt')
 
-    parser.add_argument('--general_embedding_model', default='../Model/general_embedding.vec')
-    parser.add_argument('--domain_embedding_model', default='../Model/domain_embedding/domain_embedding_100.model')
+    parser.add_argument('--general_embedding_model', default='../word_embedding/general_embedding.vec')
+    parser.add_argument('--domain_embedding_model', default='../word_embedding/domain_embedding/domain_embedding_100.model')
     parser.add_argument('--dim_general', type=int, default=300)
     parser.add_argument('--dim_domain', type=int, default=100)
 
