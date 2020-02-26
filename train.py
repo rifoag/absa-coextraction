@@ -1,5 +1,6 @@
 # from model.doer import Coextractor
 from model.feature_extractor import FeatureExtractor
+from model.doer import Coextractor
 from datetime import timedelta
 from utils import load_data, prep_train_data
 import argparse
@@ -19,7 +20,7 @@ if __name__ == "__main__":
     parser.add_argument('--train_data', default='dataset/train.txt')
     parser.add_argument('--test_data', default='dataset/test.txt')
 
-    parser.add_argument('--general_embedding_model', default='../word_embedding/general_embedding.vec')
+    parser.add_argument('--general_embedding_model', default='../word_embedding/general_embedding/general_embedding_300.model')
     parser.add_argument('--domain_embedding_model', default='../word_embedding/domain_embedding/domain_embedding_100.model')
     parser.add_argument('--dim_general', type=int, default=300)
     parser.add_argument('--dim_domain', type=int, default=100)
@@ -41,13 +42,16 @@ if __name__ == "__main__":
     X_train, y_train = load_data(args.train_data)
     X_test, y_test = load_data(args.test_data)
 
-    feature_extractor = FeatureExtractor(args.general_embedding_model, args.domain_embedding_model, args.dim_general, args.dim_domain)
+    feature_extractor = FeatureExtractor(args.general_embedding_model, args.domain_embedding_model, general_dim=args.dim_general, domain_dim=args.dim_domain)
 
-    X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, batch)
+    X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', batch=batch)
     X_test = feature_extractor.get_features(X_test)
 
-    input_size = args.general_embedding_dim + args.domain_embedding_dim
-    print(X_train)
+    input_size = args.dim_general + args.dim_domain
+#     print(X_train)
+    
+    coextractor = Coextractor(config)
+    print(coextractor.model.summary())
     # extractor = AspectOpinionExtractor()
     # extractor.init_model(input_size=input_size,
     #                      n_hidden = args.hidden_units,

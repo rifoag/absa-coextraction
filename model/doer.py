@@ -7,20 +7,14 @@ from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_
 import tensorflow as tf
 import numpy as np
 
-from keras_contrib.layers import crf
-
-from csu import CrossSharedUnit
-from regu_cell import ReguCell
+from model.csu import CrossSharedUnit
+from model.regu_cell import ReguCell
 
 class Coextractor(object):    
     def __init__(self, config):
         self.model = None
         self.config = config
         self.feature = None
-
-        self.general_embeddings = general_embeddings
-
-        self.domain_embeddings = domain_embeddings
 
         input = layers.Input(shape=(None, config.dim_general + config.dim_domain))
         
@@ -29,69 +23,76 @@ class Coextractor(object):
             first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=config.hidden_size))(input)
             first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=config.hidden_size))(input)
         if config.rnn_cell == 'lstm':
-            first_ate_rnn = layers.Bidirectional(layers.LSTM(unit=config.hidden_size,
+            first_ate_rnn = layers.Bidirectional(layers.LSTM(units=config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
-                                                    kernel_initializer=initializers.random_uniform(-0.2, 0.2),
-                                                    recurrent_initializer=initializers.random_uniform(-0.2, 0.2),
+                                                    kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
+                                                    recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     dropout=config.dropout_rate))(input)
-            first_asc_rnn = layers.Bidirectional(layers.LSTM(unit=config.hidden_size,
+            first_asc_rnn = layers.Bidirectional(layers.LSTM(units=config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
-                                                    kernel_initializer=initializers.random_uniform(-0.2, 0.2),
-                                                    recurrent_initializer=initializers.random_uniform(-0.2, 0.2),
+                                                    kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
+                                                    recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     dropout=config.dropout_rate))(input)
         elif config.rnn_cell == 'gru':
-            first_ate_rnn = layers.Bidirectional(layers.GRU(unit=config.hidden_size,
+            first_ate_rnn = layers.Bidirectional(layers.GRU(units=config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
-                                                    kernel_initializer=initializers.random_uniform(-0.2, 0.2),
-                                                    recurrent_initializer=initializers.random_uniform(-0.2, 0.2),
+                                                    kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
+                                                    recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     dropout=config.dropout_rate))(input)
-            first_asc_rnn = layers.Bidirectional(layers.GRU(unit=config.hidden_size,
+            first_asc_rnn = layers.Bidirectional(layers.GRU(units=config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
-                                                    kernel_initializer=initializers.random_uniform(-0.2, 0.2),
-                                                    recurrent_initializer=initializers.random_uniform(-0.2, 0.2),
+                                                    kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
+                                                    recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     dropout=config.dropout_rate))(input)
         
-        first_ate_dropout = layers.Dropout(dropout_rate)(first_ate_rnn)
-        first_asc_dropout = layers.Dropout(dropout_rate)(first_asc_rnn)
+        first_ate_dropout = layers.Dropout(config.dropout_rate)(first_ate_rnn)
+        first_asc_dropout = layers.Dropout(config.dropout_rate)(first_asc_rnn)
 
-        csu = CrossSharedUnit(config=self.config)(first_ate_dropout, first_asc_dropout)
+#         csu = CrossSharedUnit(config=self.config)([first_ate_dropout, first_asc_dropout])
 
         # second RNN layer
         if config.rnn_cell == 'lstm':
-            second_ate_rnn = layers.Bidirectional(layers.LSTM(unit=config.hidden_size,
+            second_ate_rnn = layers.Bidirectional(layers.LSTM(units=config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
-                                                    kernel_initializer=initializers.random_uniform(-0.2, 0.2),
-                                                    recurrent_initializer=initializers.random_uniform(-0.2, 0.2),
+                                                    kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
+                                                    recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     dropout=config.dropout_rate))(input)
-            second_asc_rnn = layers.Bidirectional(layers.LSTM(unit=config.hidden_size,
+            second_asc_rnn = layers.Bidirectional(layers.LSTM(units=config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
-                                                    kernel_initializer=initializers.random_uniform(-0.2, 0.2),
-                                                    recurrent_initializer=initializers.random_uniform(-0.2, 0.2),
+                                                    kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
+                                                    recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     dropout=config.dropout_rate))(input)
         elif config.rnn_cell == 'gru':
-            second_ate_rnn = layers.Bidirectional(layers.GRU(unit=config.hidden_size,
+            second_ate_rnn = layers.Bidirectional(layers.GRU(units=config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
-                                                    kernel_initializer=initializers.random_uniform(-0.2, 0.2),
-                                                    recurrent_initializer=initializers.random_uniform(-0.2, 0.2),
+                                                    kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
+                                                    recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     dropout=config.dropout_rate))(input)
-            second_asc_rnn = layers.Bidirectional(layers.GRU(unit=config.hidden_size,
+            second_asc_rnn = layers.Bidirectional(layers.GRU(units=config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
-                                                    kernel_initializer=initializers.random_uniform(-0.2, 0.2),
-                                                    recurrent_initializer=initializers.random_uniform(-0.2, 0.2),
+                                                    kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
+                                                    recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     dropout=config.dropout_rate))(input)
         
-        second_ate_dropout = layers.Dropout(dropout_rate)(second_ate_rnn)
-        second_asc_dropout = layers.Dropout(dropout_rate)(second_asc_rnn)
+        second_ate_dropout = layers.Dropout(config.dropout_rate)(second_ate_rnn)
+        second_asc_dropout = layers.Dropout(config.dropout_rate)(second_asc_rnn)
 
         # interface layer
-        ate_crf = CRF(config.n_aspect_tags)
-        asc_crf = CRF(config.n_polarity_tags)
+        # ate_crf = CRF(config.n_aspect_tags)(second_ate_dropout)
+        # asc_crf = CRF(config.n_polarity_tags)(second_asc_dropout)
+        ate_dense = layers.Dense(config.hidden_size, activation='softmax')(second_ate_dropout)
+        asc_dense = layers.Dense(config.hidden_size, activation='softmax')(second_asc_dropout)
+
+        self.model = tf.keras.Model(inputs=input, outputs=[ate_dense, asc_dense])
+        self.model.compile(optimizer='nadam',
+        loss='categorical_crossentropy',
+        metrics=['accuracy'])
     

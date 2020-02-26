@@ -10,23 +10,23 @@ class ReguCell(Layer):
     def build(self, input_shape):        
         self.wufo = self.add_weight(name='forget_residual_gate_weights',
                                   shape=(input_shape[1], 2*self.hidden_size),
-                                  initializer=K.contrib.layers.xavier_initializer()
+                                  initializer=K.contrib.layers.xavier_initializer(),
                                   trainable=True)
         self.bfo = self.add_weight(name='forget_residual_gate_biases',
                                   shape=(2*self.hidden_size),
-                                  initializer=K.constant_initializer(0.0)
+                                  initializer=K.constant_initializer(0.0),
                                   trainable=True)
         self.wi = self.add_weight(name='cell_memory_weight',
                                   shape=(input_shape[1], self.hidden_size),
-                                  initializer=K.contrib.layers.xavier_initializer()
+                                  initializer=K.contrib.layers.xavier_initializer(),
                                   trainable=True)
         self.bi = self.add_weight(name='cell_memory_bias',
                                   shape=(self.hidden_size),
-                                  initializer=K.constant_initializer(0.0)
+                                  initializer=K.constant_initializer(0.0),
                                   trainable=True)
         self.wx = self.add_weight(name='input_projection_weight',
                                   shape=(input_shape[1], self.hidden_size),
-                                  initializer=K.contrib.layers.xavier_initializer()
+                                  initializer=K.contrib.layers.xavier_initializer(),
                                   trainable=True)
         super(ReguCell, self).build(input_shape)  # Be sure to call this at the end
 
