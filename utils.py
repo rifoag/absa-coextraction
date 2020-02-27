@@ -1,52 +1,22 @@
 from model.feature_extractor import FeatureExtractor
+from sklearn import preprocessing
 import numpy as np
 
 def load_data(filename):
-    """
-    Loads data and label from a file.
-
-    Parameters
-    ----------
-    filename: Filename that contains the data.
-
-    File format: tab-separated, blank line at the end of a sentence.
-    Example:
-    ```
-    pelayanan	B-ASPECT
-    ramah	B-SENTIMENT
-    ,	O
-    kamar	B-ASPECT
-    nyaman	B-SENTIMENT
-    dan	O
-    fasilitas	B-ASPECT
-    lengkap	B-SENTIMENT
-    .	O
-    hanya	O
-    airnya	B-ASPECT
-    showernya	I-ASPECT
-    kurang	B-SENTIMENT
-    panas	I-SENTIMENT
-    .	O
-    <blank line>
-    ```
-
-    Returns
-    -------
-    tuple of data and labels.
-    """
     data, labels = [], []
     with open(filename, encoding='utf-8') as f:
-        tokens, tags = [], []
+        tokens, asp_sent_tags, polarity_tags = [], [], []
         for line in f:
             line = line.rstrip()
             if line:
-                token, tag = line.split('\t')
+                token, asp_sent_tag, polarity_tag = line.split('\t')
                 tokens.append(token)
-                tags.append(tag)
+                asp_sent_tags.append(asp_sent_tag)
+                polarity_tags.append(polarity_tag)
             else:
                 data.append(tokens)
-                labels.append(tags)
-                tokens, tags = [], []
+                labels.append([asp_sent_tags, polarity_tags])
+                tokens, asp_sent_tags, polarity_tags = [], [], []
 
     return data, labels
 
@@ -71,44 +41,13 @@ def prep_train_data(X, y, feature_extractor, feature='double_embedding', batch=F
         max_len = None
 
     X_train = feature_extractor.get_features(X, feature, max_len)
+    lb_asp_sent_term = preprocessing.LabelBinarizer()
+    lb_polarity = preprocessing.LabelBinarizer()
+    lb_asp_sent_term.fit(['B-ASPECT', 'I-ASPECT', 'B-SENTIMENT', 'I-SENTIMENT', 'O'])
+    lb_polarity.fit(['PO', 'NG', 'NT', 'CF', 'O'])
 
-    y_train = []
-    ya_train = []
-    yo_train = []
-    for i in range(len(y)):
-        ya = []
-        yo = []
-        for label in y[i]:
-            if label == 'O':
-                ya.append([1, 0, 0])
-                yo.append([1, 0, 0])
-            if label == 'B-ASPECT':
-                ya.append([0, 1, 0])
-                yo.append([1, 0, 0])
-            elif label == 'I-ASPECT':
-                ya.append([0, 0, 1])
-                yo.append([1, 0, 0])
-            elif label == 'B-SENTIMENT':
-                ya.append([1, 0, 0])
-                yo.append([0, 1, 0])
-            elif label == 'I-SENTIMENT':
-                ya.append([1, 0, 0])
-                yo.append([0, 0, 1])
-
-        # padding
-        if batch:
-            for j in range(len(y[i]), max_len):
-                ya.append([1, 0, 0])
-                yo.append([1, 0, 0])
-            ya_train.append(ya)
-            yo_train.append(yo)
-
-        else:
-            ya = np.asarray([ya])
-            yo = np.asarray([yo])
-            y_train.append([ya, yo])
-
-    if batch:
-        return np.asarray(X_train), [np.asarray(ya_train), np.asarray(yo_train)]
-    else:
-        return X_train, y_train
+    for asp_sent_term, polarity in y:
+        lb_asp_sent_term.transform(asp_sent_term)
+        lb_polarity.transform(polarity)
+    
+    return X_train, y
