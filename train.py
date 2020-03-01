@@ -1,6 +1,6 @@
 # from model.doer import Coextractor
 from model.feature_extractor import FeatureExtractor
-from model.doer import Coextractor
+# from model.doer import Coextractor
 from datetime import timedelta
 from utils import load_data, prep_train_data
 import argparse
@@ -12,7 +12,6 @@ def config_from_args(args):
     config = Config()
     for key, value in vars(args).items():
         config.__dict__[key] = value
-    # config.auto_config()
     return config
 
 if __name__ == "__main__":
@@ -47,29 +46,21 @@ if __name__ == "__main__":
 
     X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', batch=batch)
     # X_test = feature_extractor.get_features(X_test)
+    print(X_train[0])
+    print(X_train.shape)
+    print(y_train[0])
+    print(y_train.shape)
 
     input_size = args.dim_general + args.dim_domain
     
-    coextractor = Coextractor(config)
-    print(coextractor.model.summary())
-    np.random.seed(55)
-    print("TRAIN:")
-    start_time = time.time()
-    print(y_train[0])
-    print(y_train.shape)
-    coextractor.train(X_train, y_train)
-    finish_time = time.time()
-    print('Elapsed time: {}'.format(timedelta(seconds=finish_time-start_time)))
-    # extractor = AspectOpinionExtractor()
-    # extractor.init_model(input_size=input_size,
-    #                      n_hidden = args.hidden_units,
-    #                      n_tensors = args.n_tensors,
-    #                      n_layers = args.n_layers,
-    #                      dropout_rate = args.dropout_rate,
-    #                      rnn_type = args.rnn_type)
-
-    # print(extractor.get_summary())
-
-    # extractor.fit(X_train, y_train, args.epoch, args.batch_size, args.verbose)
+    # coextractor = Coextractor(config)
+    # print(coextractor.model.summary())
+    # np.random.seed(55)
+    # print("TRAIN:")
+    # start_time = time.time()
+    # coextractor.train(X_train, y_train)
+    # finish_time = time.time()
+    # print('Elapsed time: {}'.format(timedelta(seconds=finish_time-start_time)))
+    
     # extractor.evaluate(X_test, y_test)
     # extractor.save("final_model.mdl")
