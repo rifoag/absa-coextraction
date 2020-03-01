@@ -88,13 +88,15 @@ class Coextractor(object):
         # interface layer
         # ate_crf = CRF(config.n_aspect_tags)(second_ate_dropout)
         # asc_crf = CRF(config.n_polarity_tags)(second_asc_dropout)
-        ate_dense = layers.Dense(config.hidden_size, activation='softmax')(second_ate_dropout)
-        asc_dense = layers.Dense(config.hidden_size, activation='softmax')(second_asc_dropout)
+        ate_dense = layers.Dense(5, activation='softmax')(second_ate_dropout)
+        asc_dense = layers.Dense(5, activation='softmax')(second_asc_dropout)
 
         self.model = tf.keras.Model(inputs=input, outputs=[ate_dense, asc_dense])
         self.model.compile(optimizer='nadam',
         loss='categorical_crossentropy',
         metrics=['accuracy'])
         
-#         def train(X_train, y_train)
-    
+    def train(self, X_train, y_train):
+        es = EarlyStopping(monitor='val_loss', mode='min', patience=1)
+        mc = ModelCheckpoint(None, monitor='val_loss', mode='min', save_best_only=True)
+        self.model.fit(X_train, y_train)

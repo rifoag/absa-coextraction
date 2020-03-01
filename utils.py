@@ -47,6 +47,9 @@ def prep_train_data(X, y, feature_extractor, feature='double_embedding', batch=F
     lb_polarity.fit(['PO', 'NG', 'NT', 'CF', 'O'])
     
     y_train = []
+    y_asp_sent = []
+    y_polarity = []
     for asp_sent_term, polarity in y:
-        y_train.append([lb_asp_sent_term.transform(asp_sent_term), lb_polarity.transform(polarity)])
-    return X_train, y_train
+        y_asp_sent.append(lb_asp_sent_term.transform(asp_sent_term))
+        y_polarity.append(lb_polarity.transform(polarity))
+    return np.asarray(X_train), [np.asarray(y_asp_sent), np.asarray(y_polarity)]
