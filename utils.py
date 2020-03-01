@@ -45,9 +45,8 @@ def prep_train_data(X, y, feature_extractor, feature='double_embedding', batch=F
     lb_polarity = preprocessing.LabelBinarizer()
     lb_asp_sent_term.fit(['B-ASPECT', 'I-ASPECT', 'B-SENTIMENT', 'I-SENTIMENT', 'O'])
     lb_polarity.fit(['PO', 'NG', 'NT', 'CF', 'O'])
-
-    for asp_sent_term, polarity in y:
-        lb_asp_sent_term.transform(asp_sent_term)
-        lb_polarity.transform(polarity)
     
-    return X_train, y
+    y_train = []
+    for asp_sent_term, polarity in y:
+        y_train.append([lb_asp_sent_term.transform(asp_sent_term), lb_polarity.transform(polarity)])
+    return X_train, y_train

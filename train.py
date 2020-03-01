@@ -41,8 +41,6 @@ if __name__ == "__main__":
 
     X_train, y_train = load_data(args.train_data)
     # X_test, y_test = load_data(args.test_data)
-    print(X_train[0])
-    print(y_train[0])
 
     feature_extractor = FeatureExtractor(args.general_embedding_model, args.domain_embedding_model, general_dim=args.dim_general, domain_dim=args.dim_domain)
 
@@ -50,14 +48,12 @@ if __name__ == "__main__":
     # X_test = feature_extractor.get_features(X_test)
 
     input_size = args.dim_general + args.dim_domain
-#     print(X_train)
     
     # coextractor = Coextractor(config)
     # print(coextractor.model.summary())
     # extractor = AspectOpinionExtractor()
     # extractor.init_model(input_size=input_size,
-    #                      n_hidden = ar 
-    # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------zgs.hidden_units,
+    #                      n_hidden = args.hidden_units,
     #                      n_tensors = args.n_tensors,
     #                      n_layers = args.n_layers,
     #                      dropout_rate = args.dropout_rate,

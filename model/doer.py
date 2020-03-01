@@ -95,4 +95,6 @@ class Coextractor(object):
         self.model.compile(optimizer='nadam',
         loss='categorical_crossentropy',
         metrics=['accuracy'])
+        
+#         def train(X_train, y_train)
     
