@@ -5,7 +5,7 @@ class Config(object):
         self.dim_general = 300
         
         # model control
-        self.rnn_cell = "regu"
+        self.rnn_cell = "lstm"
         self.do_cross_share = False
         self.cross_share_k = 5
         

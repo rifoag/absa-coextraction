@@ -33481,3 +33481,7 @@ yang	O	O
 baik	B-SENTIMENT	O
 .	O	O
 
+pelayanan	B-ASPECT	O
+yang	O	O
+buruk	B-SENTIMENT	O
+.	O	O
