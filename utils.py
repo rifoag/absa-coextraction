@@ -1,5 +1,4 @@
 from model.feature_extractor import FeatureExtractor
-from sklearn import preprocessing
 import numpy as np
 
 def load_data(filename):
@@ -20,7 +19,7 @@ def load_data(filename):
 
     return data, labels
 
-def prep_train_data(X, y, feature_extractor, feature='double_embedding', batch=False):
+def prep_train_data(X, y, feature_extractor, feature='double_embedding', batch=True):
     """
     Convert data and labels into compatible format for training.
 
@@ -39,17 +38,44 @@ def prep_train_data(X, y, feature_extractor, feature='double_embedding', batch=F
         max_len = feature_extractor.get_max_len(X)
     else:
         max_len = None
-
     X_train = feature_extractor.get_features(X, feature, max_len)
-    lb_asp_sent_term = preprocessing.LabelBinarizer()
-    lb_polarity = preprocessing.LabelBinarizer()
-    lb_asp_sent_term.fit(['B-ASPECT', 'I-ASPECT', 'B-SENTIMENT', 'I-SENTIMENT', 'O'])
-    lb_polarity.fit(['PO', 'NG', 'NT', 'CF', 'O'])
     
     y_train = []
     y_asp_sent = []
     y_polarity = []
-    for asp_sent_term, polarity in y:
-        y_asp_sent.append(lb_asp_sent_term.transform(asp_sent_term))
-        y_polarity.append(lb_polarity.transform(polarity))
+    
+    for asp_sent_terms, polarities in y:
+        ya = []
+        yp = []
+        
+        for asp_sent_term in asp_sent_terms:
+            if asp_sent_term == 'O':
+                ya.append([1, 0, 0, 0, 0])
+            elif asp_sent_term == 'B-ASPECT':
+                ya.append([0, 1, 0, 0, 0])
+            elif asp_sent_term == 'I-ASPECT':
+                ya.append([0, 0, 1, 0, 0])
+            elif asp_sent_term == 'B-SENTIMENT':
+                ya.append([0, 0, 0, 1, 0])
+            elif asp_sent_term == 'I-SENTIMENT':
+                ya.append([0, 0, 0, 0, 1])
+            
+        for polarity in polarities:
+            if polarity == 'O':
+                yp.append([1, 0, 0, 0, 0])
+            elif polarity == 'PO':
+                yp.append([0, 1, 0, 0, 0])
+            elif polarity == 'NG':
+                yp.append([0, 0, 1, 0, 0])
+            elif polarity == 'NT':
+                yp.append([0, 0, 0, 1, 0])
+            elif polarity == 'CF':
+                yp.append([0, 0, 0, 0, 1])
+        
+        for j in range(len(asp_sent_terms), max_len):
+            ya.append([1, 0, 0, 0, 0])
+            yp.append([1, 0, 0, 0, 0])
+        
+        y_asp_sent.append(ya)
+        y_polarity.append(yp)
     return np.asarray(X_train), [np.asarray(y_asp_sent), np.asarray(y_polarity)]
