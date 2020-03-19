@@ -45,16 +45,16 @@ if __name__ == "__main__":
     
     config.max_sentence_size = feature_extractor.get_max_len(X_train)
     X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', batch=batch)
-#     X_test = feature_extractor.get_features(X_test)
+    X_test = feature_extractor.get_features(X_test, feature='double_embedding', max_len=config.max_sentence_size)
     
     coextractor = Coextractor(config)
+    coextractor.init_model(config)
     print(coextractor.model.summary())
     np.random.seed(55)
     print("TRAIN:")
     start_time = time.time()
-    coextractor.train(X_train, y_train)
+    coextractor.train(X_train, y_train, config)
     finish_time = time.time()
     print('Elapsed time: {}'.format(timedelta(seconds=finish_time-start_time)))
-    
-    extractor.save("proto_model.mdl")
-    # extractor.evaluate(X_test, y_test)
+    coextractor.save("model_weights")
+#     coextractor.evaluate(X_test, y_test)
