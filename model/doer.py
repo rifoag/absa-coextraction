@@ -111,7 +111,19 @@ class Coextractor(object):
         loss='categorical_crossentropy',
         metrics=['accuracy'])
         
-    def train(self, X_train, y_train):
+    def train(self, X_train, y_train, config):
         es = EarlyStopping(monitor='val_loss', mode='min', patience=1)
         mc = ModelCheckpoint(None, monitor='val_loss', mode='min', save_best_only=True)
-        self.model.fit(X_train, y_train)
+        self.model.fit(X_train, y_train, batch_size=config.batch_size, callbacks=[es, mc])
+
+    def predict(self, X):
+        y = []
+        y = self.model.predict(X[i])
+        print(y)
+            
+    def save(self, filename):
+        self.model.save(filename)
+
+    def load(self, filename):
+        self.model = load_model(filename)
+        return self

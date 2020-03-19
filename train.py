@@ -16,8 +16,8 @@ def config_from_args(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--train_data', default='dataset/annotated/train_227.txt')
-    parser.add_argument('--test_data', default='dataset/test.txt')
+    parser.add_argument('--train_data', default='dataset/annotated/train_319.txt')
+    parser.add_argument('--test_data', default='dataset/annotated/test_319.txt')
 
     parser.add_argument('--general_embedding_model', default='../word_embedding/general_embedding/general_embedding_300.model')
     parser.add_argument('--domain_embedding_model', default='../word_embedding/domain_embedding/domain_embedding_100.model')
@@ -39,9 +39,7 @@ if __name__ == "__main__":
     batch = False if args.batch_size == 1 else True
 
     X_train, y_train = load_data(args.train_data)
-    # X_test, y_test = load_data(args.test_data)
-    X_train = X_train[:1600]
-    y_train = y_train[:1600]
+    X_test, y_test = load_data(args.test_data)
     
     feature_extractor = FeatureExtractor(args.general_embedding_model, args.domain_embedding_model, general_dim=args.dim_general, domain_dim=args.dim_domain)
     
@@ -58,5 +56,5 @@ if __name__ == "__main__":
     finish_time = time.time()
     print('Elapsed time: {}'.format(timedelta(seconds=finish_time-start_time)))
     
+    extractor.save("proto_model.mdl")
     # extractor.evaluate(X_test, y_test)
-    # extractor.save("final_model.mdl")
