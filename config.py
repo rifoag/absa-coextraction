@@ -5,29 +5,20 @@ class Config(object):
         self.dim_general = 300
         
         # model control
-        self.rnn_cell = "lstm"
+        self.rnn_cell = 'lstm'
         self.do_cross_share = False
+        self.dropout_rate = 0.50
         self.cross_share_k = 5
-        
-        # default
-        self.crf_loss = True
-        self.train_embeddings = False
-        self.current_path = "."
+        self.hidden_size = 300
         
         # data
         self.max_iter = None
-
-        self.nepochs = 50
-        self.dropout_rate = 0.55
+        
+        # hyperparameter
         self.batch_size = 16
-        self.learning_rate = 0.001
-        self.learning_rate_decay = 0.95
-        self.decay_steps = 500
-        self.nepoch_no_imprv = 10
-
-        self.test_batch_size = 256
-        self.hidden_size = 300
-        self.char_hidden_size = 100
+        self.epoch = 15
+        self.patience = 1
+        self.verbose = 1
 
         # derivative variable
         self.n_aspect_tags = 0

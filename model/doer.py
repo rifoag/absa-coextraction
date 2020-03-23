@@ -3,7 +3,7 @@ from tensorflow.keras.models import load_model, save_model
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow import initializers
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
-# from seqeval.metrics import classification_report, performance_measure
+from seqeval.metrics import classification_report, performance_measure
 import numpy as np
 import tensorflow.keras.backend as K
 
@@ -16,42 +16,42 @@ class Coextractor(object):
         self.config = config
         self.feature = None
     
-    def init_model(self, config):
-        input = layers.Input(shape=(None, config.dim_general + config.dim_domain))
+    def init_model(self):
+        input = layers.Input(shape=(None, self.config.dim_general + self.config.dim_domain))
         
         # first RNN layer
-        if config.rnn_cell == 'regu':
-            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=config.hidden_size))(input)
-            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=config.hidden_size))(input)
-        elif config.rnn_cell == 'lstm':
-            first_ate_rnn = layers.Bidirectional(layers.LSTM(config.hidden_size,
+        if self.config.rnn_cell == 'regu':
+            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size))(input)
+            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size))(input)
+        elif self.config.rnn_cell == 'lstm':
+            first_ate_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=config.dropout_rate))(input)
-            first_asc_rnn = layers.Bidirectional(layers.LSTM(config.hidden_size,
+                                                    dropout=self.config.dropout_rate))(input)
+            first_asc_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=config.dropout_rate))(input)
-        elif config.rnn_cell == 'gru':
-            first_ate_rnn = layers.Bidirectional(layers.GRU(config.hidden_size,
+                                                    dropout=self.config.dropout_rate))(input)
+        elif self.config.rnn_cell == 'gru':
+            first_ate_rnn = layers.Bidirectional(layers.GRU(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=config.dropout_rate))(input)
-            first_asc_rnn = layers.Bidirectional(layers.GRU(config.hidden_size,
+                                                    dropout=self.config.dropout_rate))(input)
+            first_asc_rnn = layers.Bidirectional(layers.GRU(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=config.dropout_rate))(input)
+                                                    dropout=self.config.dropout_rate))(input)
         
-        first_ate_dropout = layers.Dropout(config.dropout_rate)(first_ate_rnn)
-        first_asc_dropout = layers.Dropout(config.dropout_rate)(first_asc_rnn)
+        first_ate_dropout = layers.Dropout(self.config.dropout_rate)(first_ate_rnn)
+        first_asc_dropout = layers.Dropout(self.config.dropout_rate)(first_asc_rnn)
 
         csu = CrossSharedUnit(config=self.config)([first_ate_dropout, first_asc_dropout])
         
@@ -69,42 +69,42 @@ class Coextractor(object):
         split_asc = layers.Lambda(split_layer_right, output_shape=split_layer_right_output_shape)(csu)
         
         # second RNN layer
-        if config.rnn_cell == 'regu':
-            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=config.hidden_size))(split_ate)
-            first_asc_rnn = layers.Bidirectional(ReguCell(hidden_size=config.hidden_size))(split_asc)
-        elif config.rnn_cell == 'lstm':
-            second_ate_rnn = layers.Bidirectional(layers.LSTM(config.hidden_size,
+        if self.config.rnn_cell == 'regu':
+            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size))(split_ate)
+            first_asc_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size))(split_asc)
+        elif self.config.rnn_cell == 'lstm':
+            second_ate_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=config.dropout_rate))(split_ate)
-            second_asc_rnn = layers.Bidirectional(layers.LSTM(config.hidden_size,
+                                                    dropout=self.config.dropout_rate))(split_ate)
+            second_asc_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=config.dropout_rate))(split_asc)
-        elif config.rnn_cell == 'gru':
-            second_ate_rnn = layers.Bidirectional(layers.GRU(config.hidden_size,
+                                                    dropout=self.config.dropout_rate))(split_asc)
+        elif self.config.rnn_cell == 'gru':
+            second_ate_rnn = layers.Bidirectional(layers.GRU(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=config.dropout_rate))(split_ate)
-            second_asc_rnn = layers.Bidirectional(layers.GRU(config.hidden_size,
+                                                    dropout=self.config.dropout_rate))(split_ate)
+            second_asc_rnn = layers.Bidirectional(layers.GRU(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=config.dropout_rate))(split_asc)
+                                                    dropout=self.config.dropout_rate))(split_asc)
         
-        second_ate_dropout = layers.Dropout(config.dropout_rate)(second_ate_rnn)
-        second_asc_dropout = layers.Dropout(config.dropout_rate)(second_asc_rnn)
+        second_ate_dropout = layers.Dropout(self.config.dropout_rate)(second_ate_rnn)
+        second_asc_dropout = layers.Dropout(self.config.dropout_rate)(second_asc_rnn)
 
         # interface layer
-        # ate_crf = CRF(config.n_aspect_tags)(second_ate_dropout)
-        # asc_crf = CRF(config.n_polarity_tags)(second_asc_dropout)
+        # ate_crf = CRF(self.config.n_aspect_tags)(second_ate_dropout)
+        # asc_crf = CRF(self.config.n_polarity_tags)(second_asc_dropout)
         ate_dense = layers.Dense(5, activation='softmax')(second_ate_dropout)
         asc_dense = layers.Dense(5, activation='softmax')(second_asc_dropout)
 
@@ -113,10 +113,14 @@ class Coextractor(object):
         loss='categorical_crossentropy',
         metrics=['accuracy'])
     
-    def train(self, X_train, y_train, config):
-        es = EarlyStopping(monitor='loss', mode='min', patience=1)
-#         mc = ModelCheckpoint(None, monitor='loss', mode='min', save_best_only=True)
-        self.model.fit(X_train, y_train, batch_size=config.batch_size, callbacks=[es])
+    def train(self, X_train, y_train):
+        es = EarlyStopping(monitor='loss', mode='min', patience=self.config.patience)
+        mc = ModelCheckpoint('/output/model_doer', monitor='loss', mode='min', save_best_only=True, save_weights_only=True)
+        self.model.fit(X_train, y_train,
+                       batch_size=self.config.batch_size,
+                       epochs=self.config.epoch,
+                       verbose=self.config.verbose,
+                       callbacks=[es, mc])
 
     def predict(self, X):
         y = []
@@ -159,7 +163,6 @@ class Coextractor(object):
     def save(self, filename):
         self.model.save_weights(filename, save_format='tf')
 
-
     def load(self, filename, X_train, y_train):
         self.init_model(self.config)
         self.model.train_on_batch(X_train[:1], [y_train[0][:1], y_train[1][:1]])
@@ -167,7 +170,7 @@ class Coextractor(object):
 
         return self
     
-    def evaluate(self, X, y):
+    def evaluate(self, X, y, sentences):
         y_pred = self.predict(X)
         y_true_ate = []
         y_pred_ate = []
@@ -223,7 +226,15 @@ class Coextractor(object):
                     y_pred_asc.append(4)
         
         self.print_evaluations("Aspect and Sentiment Term Extraction", y_true_ate, y_pred_ate)
+        self.print_report(y_true[0], y_pred[0])
+        if sentences != None:
+            self.get_wrong_predictions(y[0], y_pred[0], sentences)
+            
         self.print_evaluations("Aspect Sentiment Classification", y_true_asc, y_pred_asc)
+        self.print_report(y_true[1], y_pred[1])
+        if sentences != None:
+            self.get_wrong_predictions(y[1], y_pred[1], sentences)
+
     
     def print_evaluations(self, task_name, y_true, y_pred):
         print(task_name)
@@ -241,4 +252,23 @@ class Coextractor(object):
         print("F1-score:")
         print("weighted : ", f1_score(y_true, y_pred, average='weighted'))
         print("macro : ", f1_score(y_true, y_pred, average='macro'))
-        print()
+    
+    def print_report(self, y_true, y_pred):
+        print(classification_report(y_true, y_pred))
+        print(performance_measure(y_true, y_pred))
+        
+        
+    def get_wrong_predictions(self, y, y_pred, sentences):
+        count = 0
+        for idx in range(len(y)):
+            wrong = False
+            for idx2 in range(len(y[idx])):
+                if y[idx][idx2] != y_pred[idx][idx2]:
+                    if not(wrong):
+                        print("")
+                        print('sentence:', " ".join(sentences[idx]))
+                        print('labels:', " ".join(y[idx]))
+                    wrong = True
+                    count += 1
+                    print(sentences[idx][idx2], '\t| P:', y_pred[idx][idx2], '\t| A:', y[idx][idx2])
+        print(count, 'words misclasified')
