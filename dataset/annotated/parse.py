@@ -75,9 +75,7 @@ data, labels = load_data("test_2k_output_Feb_26_2020.txt")
 data.pop(0)
 labels.pop(0)
 labels = convert_labels(labels)
-print(data[1999])
-print(labels[1999])
-data, labels = data[:1000], labels[:1000]
+data, labels = data[:100], labels[:100]
 print(len(data))
-write_data(data, labels, "test_319.txt")
+write_data(data, labels, "test_small.txt")
 
