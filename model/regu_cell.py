@@ -39,7 +39,7 @@ class ReguCell(Layer):
 
     def call(self, x, states):
         sigmoid = K.math.sigmoid
-        c_prev = K.slice(states, [0, 0], [-1, self.hidden_size])
+        h_prev, c_prev = states
 
         regu_matrix = K.matmul(K.concat([x, c_prev], 1), self.wufo)
         regu_matrix = K.nn.bias_add(regu_matrix, self.bfo)
@@ -59,8 +59,7 @@ class ReguCell(Layer):
         c = (1-sigmoid(f)) * c_prev + sigmoid(f)*c_
         m = (1-sigmoid(o)) * c + sigmoid(o)*x_proj
 
-        new_states = K.concat([c, m], 1)
-        return m, new_states
+        return m, [h, c]
     
     def get_config(self):
         config = { 

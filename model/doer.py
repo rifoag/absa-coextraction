@@ -24,9 +24,9 @@ class Coextractor(object):
         # first RNN layerevaluate
         if self.config.rnn_cell == 'regu':
             first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size, 
-                                                    return_sequences=True))(input, [tf.zeros([input_shape, 2 * self.config.hidden_size]) for i in range(2)])
+                                                    return_sequences=True))(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]), tf.eye(self.config.hidden_size, batch_shape=[self.config.batch_size])])
             first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size,
-                                                    return_sequences=True))(input, [tf.zeros([input_shape, 2 * self.config.hidden_size]) for i in range(2)])
+                                                    return_sequences=True))(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]), tf.eye(self.config.hidden_size, batch_shape=[self.config.batch_size])])
         elif self.config.rnn_cell == 'lstm':
             first_ate_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
