@@ -71,11 +71,11 @@ def write_data(data, labels, filename):
                 tsv_writer.writerow([token, aspect_sentiment_label, polarity_label])
             tsv_writer.writerow([])
         
-data, labels = load_data("test_2k_output_Feb_26_2020.txt")
+data, labels = load_data("train_4k_output_Mar_19_2020.txt")
 data.pop(0)
 labels.pop(0)
 labels = convert_labels(labels)
-data, labels = data[:100], labels[:100]
+data, labels = data[2000:], labels[2000:]
 print(len(data))
-write_data(data, labels, "test_small.txt")
+write_data(data, labels, "2.txt")
 

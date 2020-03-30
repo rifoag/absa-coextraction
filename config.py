@@ -6,7 +6,7 @@ class Config(object):
         
         # model control
         self.rnn_cell = 'lstm'
-        self.do_cross_share = False
+        self.do_cross_share = True
         self.dropout_rate = 0.50
         self.cross_share_k = 5
         self.hidden_size = 300

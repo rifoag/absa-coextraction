@@ -6,6 +6,7 @@ from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_
 from seqeval.metrics import classification_report, performance_measure
 import numpy as np
 import tensorflow.keras.backend as K
+import tensorflow as tf
 
 from model.csu import CrossSharedUnit
 from model.regu_cell import ReguCell
@@ -17,12 +18,15 @@ class Coextractor(object):
         self.feature = None
     
     def init_model(self):
-        input = layers.Input(shape=(None, self.config.dim_general + self.config.dim_domain))
+        input_shape = self.config.dim_general + self.config.dim_domain
+        input = layers.Input(shape=(None, input_shape))
         
-        # first RNN layer
+        # first RNN layerevaluate
         if self.config.rnn_cell == 'regu':
-            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size))(input)
-            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size))(input)
+            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size, 
+                                                    return_sequences=True))(input, [tf.zeros([input_shape, 2 * self.config.hidden_size]) for i in range(2)])
+            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size,
+                                                    return_sequences=True))(input, [tf.zeros([input_shape, 2 * self.config.hidden_size]) for i in range(2)])
         elif self.config.rnn_cell == 'lstm':
             first_ate_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
@@ -120,7 +124,7 @@ class Coextractor(object):
                        batch_size=self.config.batch_size,
                        epochs=self.config.epoch,
                        verbose=self.config.verbose,
-                       callbacks=[es, mc])
+                       callbacks=[es])
 
     def predict(self, X):
         y = []
@@ -164,7 +168,7 @@ class Coextractor(object):
         self.model.save_weights(filename, save_format='tf')
 
     def load(self, filename, X_train, y_train):
-        self.init_model(self.config)
+        self.init_model()
         self.model.train_on_batch(X_train[:1], [y_train[0][:1], y_train[1][:1]])
         self.model.load_weights(filename)
 
@@ -226,14 +230,16 @@ class Coextractor(object):
                     y_pred_asc.append(4)
         
         self.print_evaluations("Aspect and Sentiment Term Extraction", y_true_ate, y_pred_ate)
-        self.print_report(y_true[0], y_pred[0])
-        if sentences != None:
-            self.get_wrong_predictions(y[0], y_pred[0], sentences)
+#         self.print_report(y[0], y_pred[0])
+#         if sentences != None:
+#             self.get_wrong_predictions(y[0], y_pred[0], sentences)
             
         self.print_evaluations("Aspect Sentiment Classification", y_true_asc, y_pred_asc)
-        self.print_report(y_true[1], y_pred[1])
-        if sentences != None:
-            self.get_wrong_predictions(y[1], y_pred[1], sentences)
+        print(y[0])
+        print(y[1])
+#         self.print_report(y[1], y_pred[1])
+#         if sentences != None:
+#             self.get_wrong_predictions(y[1], y_pred[1], sentences)
 
     
     def print_evaluations(self, task_name, y_true, y_pred):

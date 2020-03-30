@@ -16,8 +16,8 @@ def config_from_args(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--train_data', default='dataset/annotated/train_319.txt')
-    parser.add_argument('--test_data', default='dataset/annotated/test_319.txt')
+    parser.add_argument('--train_data', default='dataset/annotated/train_326.txt')
+    parser.add_argument('--test_data', default='dataset/annotated/test_324.txt')
 
     parser.add_argument('--general_embedding_model', default='../word_embedding/general_embedding/general_embedding_300.model')
     parser.add_argument('--domain_embedding_model', default='../word_embedding/domain_embedding/domain_embedding_100.model')
@@ -40,6 +40,7 @@ if __name__ == "__main__":
 
     X_train, y_train = load_data(args.train_data)
     X_test, y_test = load_data(args.test_data)
+    sentences = X_test
     
     feature_extractor = FeatureExtractor(args.general_embedding_model, args.domain_embedding_model, general_dim=args.dim_general, domain_dim=args.dim_domain)
     
@@ -48,7 +49,7 @@ if __name__ == "__main__":
     X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', batch=batch)
     X_test = feature_extractor.get_features(X_test)
     coextractor = Coextractor(config)
-    coextractor.load("model_weights", X_train, y_train)
+    coextractor.load("model_weights_324", X_train, y_train)
     print(coextractor.model.summary())
     np.random.seed(55)
-    coextractor.evaluate(X_test, y_test)
+    coextractor.evaluate(X_test, y_test, sentences)

@@ -1,38 +1,45 @@
-from keras import backend as K
-from keras.layers import Layer
+import tensorflow as K
+from tensorflow.keras.layers import Layer
+import tensorflow.keras
 
 class ReguCell(Layer):
-    def __init__(self, hidden_size, **kwargs):
+    def __init__(self, hidden_size, go_backwards=True, return_sequences=True, return_state=True, **kwargs):
         self.hidden_size = hidden_size
+        self.go_backwards = go_backwards
+        self.state_size = 2 * hidden_size
+        self.output_size = hidden_size
+        self.return_sequences= return_sequences
+        self.return_state = return_state
 
         super(ReguCell, self).__init__(**kwargs)
-
+        
     def build(self, input_shape):        
         self.wufo = self.add_weight(name='forget_residual_gate_weights',
-                                  shape=(input_shape[1], 2*self.hidden_size),
-                                  initializer=K.contrib.layers.xavier_initializer(),
+                                  shape=(input_shape[-1], 2*self.hidden_size),
+                                  initializer=tensorflow.keras.initializers.GlorotUniform(),
                                   trainable=True)
         self.bfo = self.add_weight(name='forget_residual_gate_biases',
                                   shape=(2*self.hidden_size),
                                   initializer=K.constant_initializer(0.0),
                                   trainable=True)
         self.wi = self.add_weight(name='cell_memory_weight',
-                                  shape=(input_shape[1], self.hidden_size),
-                                  initializer=K.contrib.layers.xavier_initializer(),
+                                  shape=(input_shape[-1], self.hidden_size),
+                                  initializer=tensorflow.keras.initializers.GlorotUniform(),
                                   trainable=True)
         self.bi = self.add_weight(name='cell_memory_bias',
                                   shape=(self.hidden_size),
                                   initializer=K.constant_initializer(0.0),
                                   trainable=True)
         self.wx = self.add_weight(name='input_projection_weight',
-                                  shape=(input_shape[1], self.hidden_size),
-                                  initializer=K.contrib.layers.xavier_initializer(),
+                                  shape=(input_shape[-1], self.hidden_size),
+                                  initializer=tensorflow.keras.initializers.GlorotUniform(),
                                   trainable=True)
+        self.built = True
         super(ReguCell, self).build(input_shape)  # Be sure to call this at the end
 
-    def call(self, x, state):
+    def call(self, x, states):
         sigmoid = K.math.sigmoid
-        (c_prev, _) = state
+        c_prev = K.slice(states, [0, 0], [-1, self.hidden_size])
 
         regu_matrix = K.matmul(K.concat([x, c_prev], 1), self.wufo)
         regu_matrix = K.nn.bias_add(regu_matrix, self.bfo)
@@ -52,5 +59,14 @@ class ReguCell(Layer):
         c = (1-sigmoid(f)) * c_prev + sigmoid(f)*c_
         m = (1-sigmoid(o)) * c + sigmoid(o)*x_proj
 
-        new_state = K.contrib.rnn.LSTMStateTuple(c, m)
-        return m, new_state
+        new_states = K.concat([c, m], 1)
+        return m, new_states
+    
+    def get_config(self):
+        config = { 
+            'hidden_size': self.hidden_size,
+            'go_backwards': True
+        }
+
+        base_config = super(ReguCell, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))
