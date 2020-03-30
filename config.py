@@ -5,7 +5,7 @@ class Config(object):
         self.dim_general = 300
         
         # model control
-        self.rnn_cell = 'lstm'
+        self.rnn_cell = 'regu'
         self.do_cross_share = True
         self.dropout_rate = 0.50
         self.cross_share_k = 5
@@ -15,7 +15,7 @@ class Config(object):
         self.max_iter = None
         
         # hyperparameter
-        self.batch_size = 16
+        self.batch_size = 4
         self.epoch = 15
         self.patience = 1
         self.verbose = 1

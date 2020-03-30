@@ -20,13 +20,13 @@ class Coextractor(object):
     def init_model(self):
         input_shape = self.config.dim_general + self.config.dim_domain
         input = layers.Input(shape=(None, input_shape))
-        
+
         # first RNN layerevaluate
         if self.config.rnn_cell == 'regu':
-            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size, 
-                                                    return_sequences=True))(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]), tf.eye(self.config.hidden_size, batch_shape=[self.config.batch_size])])
-            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size,
-                                                    return_sequences=True))(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]), tf.eye(self.config.hidden_size, batch_shape=[self.config.batch_size])])
+            first_ate_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True),
+                      return_sequences=True))(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
+            first_asc_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True),
+                      return_sequences=True))(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
         elif self.config.rnn_cell == 'lstm':
             first_ate_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
@@ -74,8 +74,10 @@ class Coextractor(object):
         
         # second RNN layer
         if self.config.rnn_cell == 'regu':
-            first_ate_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size))(split_ate)
-            first_asc_rnn = layers.Bidirectional(ReguCell(hidden_size=self.config.hidden_size))(split_asc)
+            second_ate_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True),
+                      return_sequences=True))(split_ate, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
+            second_asc_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True),
+                      return_sequences=True))(split_asc, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
         elif self.config.rnn_cell == 'lstm':
             second_ate_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
@@ -130,7 +132,7 @@ class Coextractor(object):
         y = []
         for i in range(len(X)):
             self.config.max_sentence_size = X[i].shape[1]
-            yate_score, yasc_score = self.model.predict(np.asarray(X[i]), batch_size=None)
+            yate_score, yasc_score = self.model.predict(np.asarray(X[i]), batch_size=1)
             K.clear_session()
             # Get the label index with the highest probability
             yate_pred = np.argmax(yate_score, 2)
