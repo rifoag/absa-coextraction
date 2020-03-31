@@ -555,7 +555,7 @@ acara	O	O
 
 terlalu	B-SENTIMENT	O
 sempit	I-SENTIMENT	O
-kamarnya	B-ASPECT	NT
+kamarnya	B-ASPECT	NG
 ,	O	O
 tetapi	O	O
 lumayanlah	B-SENTIMENT	O
@@ -1598,7 +1598,7 @@ suka	B-SENTIMENT	O
 bali	O	O
 banget	O	O
 ,	O	O
-makanan	B-ASPECT	CF
+makanan	B-ASPECT	PO
 murah	B-SENTIMENT	O
 tetapi	O	O
 lumayan	B-SENTIMENT	O
@@ -2600,7 +2600,7 @@ odol	O	O
 sikat	O	O
 )	O	O
 ,	O	O
-handuk	B-ASPECT	CF
+handuk	B-ASPECT	PO
 ada	O	O
 2	O	O
 tetapi	O	O
@@ -4294,7 +4294,7 @@ menginap	O	O
 disini	O	O
 .	O	O
 
-makanannya	B-ASPECT	NT
+makanannya	B-ASPECT	NG
 biasa	B-SENTIMENT	O
 ajah	I-SENTIMENT	O
 .	O	O
@@ -4368,8 +4368,8 @@ pertama	O	O
 tidak	B-SENTIMENT	O
 terlalu	I-SENTIMENT	O
 kotor	I-SENTIMENT	O
-seprai	B-ASPECT	NT
-nya	I-ASPECT	NT
+seprai	B-ASPECT	PO
+nya	I-ASPECT	PO
 .	O	O
 karena	O	O
 nyaman	O	O
@@ -5608,7 +5608,7 @@ sekian	O	O
 tetapi	O	O
 bersih	B-SENTIMENT	O
 walaupun	O	O
-kamar	B-ASPECT	CF
+kamar	B-ASPECT	NG
 tidak	B-SENTIMENT	O
 begitu	I-SENTIMENT	O
 luas	I-SENTIMENT	O
@@ -5708,7 +5708,7 @@ bunyi	B-SENTIMENT	O
 
 minus	B-SENTIMENT	O
 air	B-ASPECT	NG
-panas	I-ASPECT	CF
+panas	I-ASPECT	NG
 ,	O	O
 ac	B-ASPECT	NG
 kurang	B-SENTIMENT	O
@@ -6539,7 +6539,7 @@ hilang	O	O
 timbul	O	O
 .	O	O
 
-makanannya	B-ASPECT	CF
+makanannya	B-ASPECT	PO
 enak	B-SENTIMENT	O
 walau	O	O
 minim	B-SENTIMENT	O
@@ -7153,7 +7153,7 @@ sebelah	O	O
 hotel	O	O
 .	O	O
 untuk	O	O
-makanan	B-ASPECT	NT
+makanan	B-ASPECT	PO
 menurut	O	O
 saya	O	O
 lumayan	B-SENTIMENT	O
@@ -7646,7 +7646,7 @@ oke	B-SENTIMENT	O
 dekat	O	O
 kemang	O	O
 .	O	O
-kamar	B-ASPECT	CF
+kamar	B-ASPECT	NG
 lumayan	B-SENTIMENT	O
 besar	I-SENTIMENT	O
 tetapi	O	O
@@ -8009,7 +8009,7 @@ baik	O	O
 lagi	O	O
 .	O	O
 
-kamar	B-ASPECT	CF
+kamar	B-ASPECT	NG
 lumayan	B-SENTIMENT	O
 enak	I-SENTIMENT	O
 ,	O	O
@@ -8043,7 +8043,7 @@ di	O	O
 room	O	O
 519	O	O
 ,	O	O
-breakfast	B-ASPECT	NT
+breakfast	B-ASPECT	PO
 cukup	B-SENTIMENT	O
 walau	O	O
 menu	B-ASPECT	NG
@@ -8230,8 +8230,8 @@ intansari	O	O
 terimakasih	O	O
 .	O	O
 
-menu	B-ASPECT	CF
-breakfastnya	I-ASPECT	CF
+menu	B-ASPECT	PO
+breakfastnya	I-ASPECT	PO
 tidak	B-SENTIMENT	O
 banyak	I-SENTIMENT	O
 ,	O	O
@@ -8689,8 +8689,8 @@ tempat	I-ASPECT	NG
 tidur	I-ASPECT	NG
 .	O	O
 
-kamar	B-ASPECT	CF
-hotel	I-ASPECT	CF
+kamar	B-ASPECT	PO
+hotel	I-ASPECT	PO
 nyaman	B-SENTIMENT	O
 meskipun	O	O
 kecil	B-SENTIMENT	O
@@ -9036,7 +9036,7 @@ oke	B-SENTIMENT	O
 kamar	B-ASPECT	PO
 bersih	B-SENTIMENT	O
 tetapi	O	O
-kasurnya	B-ASPECT	CF
+kasurnya	B-ASPECT	NG
 agak	B-SENTIMENT	O
 jeblos	I-SENTIMENT	O
 begitu	I-SENTIMENT	O
@@ -9045,7 +9045,7 @@ cukup	B-SENTIMENT	O
 nyaman	I-SENTIMENT	O
 udaranya	B-ASPECT	PO
 sejuk	B-SENTIMENT	O
-sarapannya	B-ASPECT	CF
+sarapannya	B-ASPECT	PO
 cukup	B-SENTIMENT	O
 sederhana	I-SENTIMENT	O
 dengan	O	O
@@ -10871,8 +10871,8 @@ kamar	B-ASPECT	PO
 luas	B-SENTIMENT	O
 ,	O	O
 ada	B-SENTIMENT	O
-kolam	B-ASPECT	CF
-renangnya	I-ASPECT	CF
+kolam	B-ASPECT	PO
+renangnya	I-ASPECT	PO
 walau	O	O
 tidak	B-SENTIMENT	O
 terlalu	I-SENTIMENT	O
@@ -11911,7 +11911,7 @@ lagi	I-SENTIMENT	O
 terimakasih	O	O
 .	O	O
 
-sarapannya	B-ASPECT	NT
+sarapannya	B-ASPECT	NG
 biasa	B-SENTIMENT	O
 saja	I-SENTIMENT	O
 ,	O	O
@@ -13226,8 +13226,8 @@ berlangganan	O	O
 kamar	B-ASPECT	PO
 bagus	B-SENTIMENT	O
 ,	O	O
-lokasi	B-ASPECT	NT
-hotel	I-ASPECT	NT
+lokasi	B-ASPECT	NG
+hotel	I-ASPECT	NG
 agak	B-SENTIMENT	O
 kedalam	I-SENTIMENT	O
 .	O	O
@@ -13484,7 +13484,7 @@ bagus	B-SENTIMENT	O
 bersih	I-SENTIMENT	O
 ,	O	O
 walau	O	O
-kamar	B-ASPECT	CF
+kamar	B-ASPECT	PO
 kecil	B-SENTIMENT	O
 tetapi	O	O
 nyaman	B-SENTIMENT	O
@@ -13543,7 +13543,7 @@ lingkungan	B-ASPECT	O
 asri	B-SENTIMENT	O
 .	O	O
 
-kamar	B-ASPECT	CF
+kamar	B-ASPECT	PO
 tidak	B-SENTIMENT	O
 terlalu	I-SENTIMENT	O
 besar	I-SENTIMENT	O
@@ -14564,7 +14564,7 @@ keperluan	O	O
 tamu	O	O
 .	O	O
 
-kamar	B-ASPECT	NT
+kamar	B-ASPECT	NG
 biasa	B-SENTIMENT	O
 saja	I-SENTIMENT	O
 .	O	O
@@ -16872,8 +16872,8 @@ nya	O	O
 sampai	O	O
 keluar	O	O
 .	O	O
-ac	B-ASPECT	CF
-nya	I-ASPECT	CF
+ac	B-ASPECT	PO
+nya	I-ASPECT	PO
 dingin	B-SENTIMENT	O
 tetapi	O	O
 berisik	B-SENTIMENT	O
@@ -17908,7 +17908,7 @@ good	B-SENTIMENT	O
 ,	O	O
 tetapi	O	O
 gadapet	B-SENTIMENT	O
-fasilitas	B-ASPECT	CF
+fasilitas	B-ASPECT	NG
 dari	O	O
 airy	O	O
 rooms	O	O
@@ -18947,7 +18947,7 @@ untuk	O	O
 kenyamanan	O	O
 .	O	O
 
-hotelnya	B-ASPECT	CF
+hotelnya	B-ASPECT	NG
 nyaman	B-SENTIMENT	O
 tetapi	O	O
 kurang	B-SENTIMENT	O
@@ -21655,7 +21655,7 @@ nyaman	B-SENTIMENT	O
 untuk	O	O
 ditinggali	O	O
 tetapi	O	O
-kasur	B-ASPECT	CF
+kasur	B-ASPECT	NG
 terlalu	B-SENTIMENT	O
 besar	I-SENTIMENT	O
 .	O	O
@@ -24948,8 +24948,8 @@ semua	B-ASPECT	PO
 oke	B-SENTIMENT	O
 ,	O	O
 kecuali	O	O
-kamar	B-ASPECT	NT
-mandinya	I-ASPECT	NT
+kamar	B-ASPECT	NG
+mandinya	I-ASPECT	NG
 dengan	O	O
 tata	O	O
 letak	O	O
@@ -26038,7 +26038,7 @@ all	O	O
 mengecewakan	B-SENTIMENT	O
 .	O	O
 
-kamarnya	B-ASPECT	NT
+kamarnya	B-ASPECT	PO
 memang	O	O
 tidak	B-SENTIMENT	O
 terlalu	I-SENTIMENT	O
@@ -28411,7 +28411,7 @@ pelayanan	B-ASPECT	PO
 staf	I-ASPECT	PO
 baik	B-SENTIMENT	O
 ,	O	O
-kamarnya	B-ASPECT	CF
+kamarnya	B-ASPECT	PO
 bersih	B-SENTIMENT	O
 tetapi	O	O
 kecil	B-SENTIMENT	O
@@ -30132,7 +30132,7 @@ bersih	B-SENTIMENT	O
 .	O	O
 
 ukuran	O	O
-kamar	B-ASPECT	CF
+kamar	B-ASPECT	PO
 kecil	B-SENTIMENT	O
 tetapi	O	O
 cukup	B-SENTIMENT	O
@@ -31321,8 +31321,8 @@ baguss	B-SENTIMENT	O
 pelayanan	B-ASPECT	PO
 oke	B-SENTIMENT	O
 .	O	O
-tempat	B-ASPECT	CF
-parkir	I-ASPECT	CF
+tempat	B-ASPECT	PO
+parkir	I-ASPECT	PO
 juga	O	O
 disediakan	B-SENTIMENT	O
 walau	O	O
@@ -33200,8 +33200,8 @@ berfungsi	B-SENTIMENT	O
 dengan	I-SENTIMENT	O
 baik	I-SENTIMENT	O
 .	O	O
-saluran	B-ASPECT	CF
-tv	I-ASPECT	CF
+saluran	B-ASPECT	NG
+tv	I-ASPECT	NG
 sedikit	B-SENTIMENT	O
 bermasalah	I-SENTIMENT	O
 tetapi	O	O
