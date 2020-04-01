@@ -282,7 +282,7 @@ sarapan	B-ASPECT	PO
 enak	B-SENTIMENT	O
 .	O	O
 
-kamar	B-ASPECT	CF
+kamar	B-ASPECT	NG
 kurang	B-SENTIMENT	O
 terawat	I-SENTIMENT	O
 tetapi	O	O
@@ -346,7 +346,7 @@ lama	B-SENTIMENT	O
 dan	O	O
 dari	O	O
 luar	O	O
-dekorasinya	B-ASPECT	CF
+dekorasinya	B-ASPECT	NG
 agak	B-SENTIMENT	O
 tua	I-SENTIMENT	O
 dan	O	O
@@ -740,7 +740,7 @@ bersih	I-SENTIMENT	O
 saja	O	O
 .	O	O
 tetapi	O	O
-keseluruhan	B-ASPECT	CF
+keseluruhan	B-ASPECT	PO
 lumayan	B-SENTIMENT	O
 lah	O	O
 .	O	O
@@ -921,9 +921,9 @@ lumayan	B-SENTIMENT	O
 twrjangkau	I-SENTIMENT	O
 ,	O	O
 putaran	O	O
-air	B-ASPECT	CF
-keran	I-ASPECT	CF
-nya	I-ASPECT	CF
+air	B-ASPECT	NG
+keran	I-ASPECT	NG
+nya	I-ASPECT	NG
 kadang	B-SENTIMENT	O
 panas	I-SENTIMENT	O
 kadang	I-SENTIMENT	O
@@ -1031,7 +1031,7 @@ cuma	O	O
 agak	B-SENTIMENT	O
 sempit	I-SENTIMENT	O
 .	O	O
-makanan	B-ASPECT	NT
+makanan	B-ASPECT	PO
 lumayanlah	B-SENTIMENT	O
 untuk	O	O
 perut	O	O
@@ -1160,7 +1160,7 @@ bagus	B-SENTIMENT	O
 tetapi	O	O
 tengah	O	O
 malam	O	O
-listriknya	B-ASPECT	CF
+listriknya	B-ASPECT	NG
 habis	B-SENTIMENT	O
 dan	O	O
 disuruh	O	O
@@ -1400,7 +1400,7 @@ kotor	B-SENTIMENT	O
 sik	O	O
 .	O	O
 tetapi	O	O
-pelayanannya	B-ASPECT	NT
+pelayanannya	B-ASPECT	PO
 lumayan	B-SENTIMENT	O
 untuk	O	O
 budget	O	O
@@ -1550,8 +1550,8 @@ akan	O	O
 lebih	O	O
 baik	O	O
 ada	O	O
-hair	B-ASPECT	NT
-dryer	I-ASPECT	NT
+hair	B-ASPECT	NG
+dryer	I-ASPECT	NG
 di	O	O
 kamar	O	O
 .	O	O

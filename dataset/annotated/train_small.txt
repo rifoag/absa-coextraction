@@ -555,7 +555,7 @@ acara	O	O
 
 terlalu	B-SENTIMENT	O
 sempit	I-SENTIMENT	O
-kamarnya	B-ASPECT	NT
+kamarnya	B-ASPECT	NG
 ,	O	O
 tetapi	O	O
 lumayanlah	B-SENTIMENT	O
@@ -1598,7 +1598,7 @@ suka	B-SENTIMENT	O
 bali	O	O
 banget	O	O
 ,	O	O
-makanan	B-ASPECT	CF
+makanan	B-ASPECT	PO
 murah	B-SENTIMENT	O
 tetapi	O	O
 lumayan	B-SENTIMENT	O

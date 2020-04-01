@@ -77,5 +77,5 @@ labels.pop(0)
 labels = convert_labels(labels)
 data, labels = data[2000:], labels[2000:]
 print(len(data))
-write_data(data, labels, "2.txt")
+write_data(data, labels, "train.txt")
 
