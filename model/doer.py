@@ -21,7 +21,7 @@ class Coextractor(object):
         input_shape = self.config.dim_general + self.config.dim_domain
         input = layers.Input(shape=(None, input_shape))
 
-        # first RNN layerevaluate
+        # first RNN layer
         if self.config.rnn_cell == 'regu':
             first_ate_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True),
                       return_sequences=True))(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
@@ -128,39 +128,36 @@ class Coextractor(object):
                        verbose=self.config.verbose,
                        callbacks=[es])
 
-    def predict(self, X):
+    def predict(self, X, y_true):
         y = []
+        yate_scores, yasc_scores = self.model.predict(np.asarray(X), batch_size=self.config.batch_size)
         for i in range(len(X)):
-            self.config.max_sentence_size = X[i].shape[1]
-            yate_score, yasc_score = self.model.predict(np.asarray(X[i]), batch_size=1)
-            K.clear_session()
-            # Get the label index with the highest probability
-            yate_pred = np.argmax(yate_score, 2)
-            yasc_pred = np.argmax(yasc_score, 2)
-
+            yate_pred = np.argmax(yate_scores[i], 1)
+            yasc_pred = np.argmax(yasc_scores[i], 1)
+            
             y1 = []
             y2 = []
-            for j in range(len(yate_pred[0])):
-                if yate_pred[0][j] == 0:
+            for j in range(len(y_true[i][0])):
+                if yate_pred[j] == 0:
                     y1.append('O')
-                elif yate_pred[0][j] == 1:
+                elif yate_pred[j] == 1:
                     y1.append('B-ASPECT')
-                elif yate_pred[0][j] == 2:
+                elif yate_pred[j] == 2:
                     y1.append('I-ASPECT')
-                elif yate_pred[0][j] == 3:
+                elif yate_pred[j] == 3:
                     y1.append('B-SENTIMENT')
-                elif yate_pred[0][j] == 4:
+                elif yate_pred == 4:
                     y1.append('I-SENTIMENT')
 
-                if yasc_pred[0][j] == 0:
+                if yasc_pred[j] == 0:
                     y2.append('O')
-                elif yasc_pred[0][j] == 1:
+                elif yasc_pred[j] == 1:
                     y2.append('PO')
-                elif yasc_pred[0][j] == 2:
+                elif yasc_pred[j] == 2:
                     y2.append('NG')
-                elif yasc_pred[0][j] == 3:
+                elif yasc_pred[j] == 3:
                     y2.append('NT')
-                elif yasc_pred[0][j] == 4:
+                elif yasc_pred[j] == 4:
                     y2.append('CF')
 
             y.append([y1, y2])
@@ -177,7 +174,7 @@ class Coextractor(object):
         return self
     
     def evaluate(self, X, y, sentences):
-        y_pred = self.predict(X)
+        y_pred = self.predict(X, y)
         y_true_ate = []
         y_pred_ate = []
         y_true_asc = []

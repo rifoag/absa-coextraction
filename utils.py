@@ -19,7 +19,7 @@ def load_data(filename):
 
     return data, labels
 
-def prep_train_data(X, y, feature_extractor, feature='double_embedding', batch=True):
+def prep_train_data(X, y, feature_extractor, feature='double_embedding', config=None):
     """
     Convert data and labels into compatible format for training.
 
@@ -34,8 +34,8 @@ def prep_train_data(X, y, feature_extractor, feature='double_embedding', batch=T
     -------
     tuple of data and labels in compatible format for training.
     """
-    if batch:
-        max_len = feature_extractor.get_max_len(X)
+    if config.batch_size > 0:
+        max_len = config.max_sentence_size
     else:
         max_len = None
     X_train = feature_extractor.get_features(X, feature, max_len)

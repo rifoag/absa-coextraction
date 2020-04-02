@@ -22,8 +22,8 @@ if __name__ == "__main__":
     feature_extractor = FeatureExtractor(general_embedding_model, domain_embedding_model, general_dim=config.dim_general, domain_dim=config.dim_domain)
     config.max_sentence_size = feature_extractor.get_max_len(X_train)
 
-    X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', batch=config.batch_size)
-    X_test = feature_extractor.get_features(X_test)
+    X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', config=config)
+    X_test = feature_extractor.get_features(X_test, max_len=config.max_sentence_size)
     
     coextractor = Coextractor(config)
     coextractor.init_model()
