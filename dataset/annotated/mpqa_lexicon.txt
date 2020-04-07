@@ -627,8 +627,8 @@ berempat	O
 berenang	O
 berenangnya	O
 beretika	PO
-berfungai	O
-berfungsi	O
+berfungai	PO
+berfungsi	PO
 bergabung	O
 berganti	O
 bergeser	O
@@ -2308,7 +2308,7 @@ ken	O
 kena	O
 kenapa	O
 kencang	O
-kendala	O
+kendala	NG
 kendaraa	O
 kendaraan	O
 kendaraannya	O
@@ -3413,7 +3413,7 @@ online	O
 operational	O
 operator	O
 opsi	O
-optimal	O
+optimal	PO
 or	O
 orak	O
 orang	O
