@@ -158,7 +158,10 @@ class FeatureExtractor():
         sequence of vectors of the tokens.
         """
         result = []
+        i = 0
         for token in tokens:
+            if i >= max_len:
+                break
            # if token in self.general_embedding:
            #     general_embedding = self.general_embedding[token]
            # else:
@@ -174,7 +177,8 @@ class FeatureExtractor():
                 domain_embedding = self.domain_unknown
 
             result.append(np.concatenate((general_embedding, domain_embedding)))
-
+            i += 1
+            
         if max_len != None:
             for i in range(len(tokens), max_len):
                 result.append(np.concatenate((self.general_unknown, self.domain_unknown)))

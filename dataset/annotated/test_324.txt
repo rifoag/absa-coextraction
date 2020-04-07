@@ -1549,7 +1549,7 @@ bersih	B-SENTIMENT	O
 akan	O	O
 lebih	B-SENTIMENT	O
 baik	I-SENTIMENT	O
-ada I-SENTIMENT	O
+ada	I-SENTIMENT	O
 hair	B-ASPECT	NG
 dryer	I-ASPECT	NG
 di	O	O

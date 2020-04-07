@@ -21,11 +21,5 @@ class Config(object):
         self.verbose = 1
 
         # derivative variable
-        self.n_aspect_tags = 0
-        self.n_polarity_tags = 0
-        self.n_joint_tags = 0
-        self.n_poss = 0
-        self.n_chunks = 0
-        self.n_words = 0
-        self.max_sentence_size = 0
+        self.max_sentence_size = 35
         self.max_word_size = None

@@ -9,8 +9,8 @@ import time
 
 
 if __name__ == "__main__":
-    train_data = 'dataset/annotated/train_small.txt'
-    test_data = 'dataset/annotated/test_small.txt'
+    train_data = 'dataset/annotated/train_326.txt'
+    test_data = 'dataset/annotated/test_324.txt'
     general_embedding_model = '../word_embedding/general_embedding/general_embedding_300.model'
     domain_embedding_model = '../word_embedding/domain_embedding/domain_embedding_100.model'
     config = Config()
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     sentences = X_test
     
     feature_extractor = FeatureExtractor(general_embedding_model, domain_embedding_model, general_dim=config.dim_general, domain_dim=config.dim_domain)
-    config.max_sentence_size = feature_extractor.get_max_len(X_train)
+#     config.max_sentence_size = feature_extractor.get_max_len(X_train)
 
     X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', config=config)
     X_test = feature_extractor.get_features(X_test, max_len=config.max_sentence_size)
@@ -34,6 +34,6 @@ if __name__ == "__main__":
     coextractor.train(X_train, y_train)
     finish_time = time.time()
     print('Elapsed time: {}'.format(timedelta(seconds=finish_time-start_time)))
-    coextractor.save('model_weights_324')
+    coextractor.save('model_weights_402')
     coextractor.evaluate(X_test, y_test, sentences)
     

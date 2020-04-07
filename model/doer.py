@@ -131,13 +131,15 @@ class Coextractor(object):
     def predict(self, X, y_true):
         y = []
         yate_scores, yasc_scores = self.model.predict(np.asarray(X), batch_size=self.config.batch_size)
+        
         for i in range(len(X)):
             yate_pred = np.argmax(yate_scores[i], 1)
             yasc_pred = np.argmax(yasc_scores[i], 1)
             
             y1 = []
             y2 = []
-            for j in range(len(y_true[i][0])):
+            max_iter = min(len(y_true[i][0]), self.config.max_sentence_size)
+            for j in range(max_iter):
                 if yate_pred[j] == 0:
                     y1.append('O')
                 elif yate_pred[j] == 1:
@@ -146,7 +148,7 @@ class Coextractor(object):
                     y1.append('I-ASPECT')
                 elif yate_pred[j] == 3:
                     y1.append('B-SENTIMENT')
-                elif yate_pred == 4:
+                elif yate_pred[j] == 4:
                     y1.append('I-SENTIMENT')
 
                 if yasc_pred[j] == 0:
@@ -181,7 +183,8 @@ class Coextractor(object):
         y_pred_asc = []
 
         for seq in y:
-            for i in range(len(seq[0])):
+            max_iter = min(len(seq[0]), self.config.max_sentence_size)
+            for i in range(max_iter):
                 if seq[0][i] == 'O':
                     y_true_ate.append(0)
                 elif seq[0][i] == 'B-ASPECT':
@@ -205,7 +208,8 @@ class Coextractor(object):
                     y_true_asc.append(4)
         
         for seq in y_pred:
-            for i in range(len(seq[0])):
+            max_iter = min(len(seq[0]), self.config.max_sentence_size)
+            for i in range(max_iter):
                 if seq[0][i] == 'O':
                     y_pred_ate.append(0)
                 elif seq[0][i] == 'B-ASPECT':

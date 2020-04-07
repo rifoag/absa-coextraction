@@ -48,7 +48,10 @@ def prep_train_data(X, y, feature_extractor, feature='double_embedding', config=
         ya = []
         yp = []
         
+        i = 0
         for asp_sent_term in asp_sent_terms:
+            if i >= max_len:
+                break
             if asp_sent_term == 'O':
                 ya.append([1, 0, 0, 0, 0])
             elif asp_sent_term == 'B-ASPECT':
@@ -59,8 +62,12 @@ def prep_train_data(X, y, feature_extractor, feature='double_embedding', config=
                 ya.append([0, 0, 0, 1, 0])
             elif asp_sent_term == 'I-SENTIMENT':
                 ya.append([0, 0, 0, 0, 1])
-            
+            i += 1
+        
+        i = 0
         for polarity in polarities:
+            if i >= max_len:
+                break
             if polarity == 'O':
                 yp.append([1, 0, 0, 0, 0])
             elif polarity == 'PO':
@@ -71,6 +78,7 @@ def prep_train_data(X, y, feature_extractor, feature='double_embedding', config=
                 yp.append([0, 0, 0, 1, 0])
             elif polarity == 'CF':
                 yp.append([0, 0, 0, 0, 1])
+            i += 1
         
         for j in range(len(asp_sent_terms), max_len):
             ya.append([1, 0, 0, 0, 0])
