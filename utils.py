@@ -53,6 +53,9 @@ def get_auxiliary_labels(x, y, mpqa_lexicon, max_len):
                 subj_in_sentence.append([1, 0, 0])
             i += 1
         
+        for j in range(len(sentence), max_len):
+            subj_in_sentence.append([1, 0, 0])
+        
         subjectivities.append(subj_in_sentence)
     
     # Get aspect term average lengths
@@ -162,10 +165,6 @@ def get_labels(y, max_len):
                 yp.append([0, 1, 0])
             elif polarity == 'NG':
                 yp.append([0, 0, 1])
-#             elif polarity == 'NT':
-#                 yp.append([0, 0, 0, 1, 0])
-#             elif polarity == 'CF':
-#                 yp.append([0, 0, 0, 0, 1])
             i += 1
         
         for j in range(len(asp_sent_labels), max_len):
@@ -197,5 +196,5 @@ def prep_train_data(X, y, feature_extractor, feature='double_embedding', config=
         max_len = None
     X_train = feature_extractor.get_features(X, feature, max_len)
     y_asp_sent, y_polarity = get_labels(y, max_len)
-
-    return np.asarray(X_train), [np.asarray(y_asp_sent), np.asarray(y_polarity)]
+    y_mpqa, y_ate_avg_lengths, y_asc_avg_lengths = get_auxiliary_labels(X, y, config.mpqa_lexicon, config.max_sentence_size)
+    return np.asarray(X_train), [np.asarray(y_asp_sent), np.asarray(y_polarity), np.asarray(y_mpqa)]

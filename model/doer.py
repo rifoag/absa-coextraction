@@ -56,7 +56,11 @@ class Coextractor(object):
         
         first_ate_dropout = layers.Dropout(self.config.dropout_rate)(first_ate_rnn)
         first_asc_dropout = layers.Dropout(self.config.dropout_rate)(first_asc_rnn)
-
+        
+        
+        # auxiliary test
+        sentiment_lexicon_enhancement = layers.Dense(3, activation='softmax')(first_asc_dropout)
+        
         csu = CrossSharedUnit(config=self.config)([first_ate_dropout, first_asc_dropout])
         
         def split_layer_left(input_tensor):
@@ -114,7 +118,7 @@ class Coextractor(object):
         ate_dense = layers.Dense(5, activation='softmax')(second_ate_dropout)
         asc_dense = layers.Dense(3, activation='softmax')(second_asc_dropout)
 
-        self.model = Model(inputs=input, outputs=[ate_dense, asc_dense])
+        self.model = Model(inputs=input, outputs=[ate_dense, asc_dense, sentiment_lexicon_enhancement])
         self.model.compile(optimizer='nadam',
         loss='categorical_crossentropy',
         metrics=['accuracy'])
@@ -130,7 +134,7 @@ class Coextractor(object):
 
     def predict(self, X, y_true):
         y = []
-        yate_scores, yasc_scores = self.model.predict(np.asarray(X), batch_size=self.config.batch_size)
+        yate_scores, yasc_scores, lexicon_enhancement_scores = self.model.predict(np.asarray(X), batch_size=self.config.batch_size)
         
         for i in range(len(X)):
             yate_pred = np.argmax(yate_scores[i], 1)

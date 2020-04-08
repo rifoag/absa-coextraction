@@ -1,6 +1,8 @@
 import os
 class Config(object):
     def __init__(self):
+        self.mpqa_lexicon = None
+        
         self.dim_domain = 100
         self.dim_general = 300
         
