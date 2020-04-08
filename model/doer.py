@@ -57,9 +57,19 @@ class Coextractor(object):
         first_ate_dropout = layers.Dropout(self.config.dropout_rate, name="first_ate_dropout")(first_ate_rnn)
         first_asc_dropout = layers.Dropout(self.config.dropout_rate, name="first_asc_dropout")(first_asc_rnn)
         
+        def max_pooling_layer(input_tensor):
+            return tf.reduce_max(input_tensor, axis=-2)
+        def max_pooling_layer_output_shape(shape):
+            return (shape[0], shape[2])
         
-        # auxiliary test
+        # auxiliary tasks
         sentiment_lexicon_enhancement = layers.Dense(3, activation='softmax', name="sentiment_lexicon_enhancement")(first_asc_dropout)
+        
+        max_pool_ate = layers.Lambda(max_pooling_layer, output_shape=max_pooling_layer_output_shape, name="max_pool_ate")(first_ate_rnn)
+        aspect_term_length_enhancement = layers.Dense(1, activation='sigmoid', name="aspect_term_length_enhancement")(max_pool_ate)
+        
+        max_pool_asc = layers.Lambda(max_pooling_layer, output_shape=max_pooling_layer_output_shape, name="max_pool_asc")(first_asc_rnn)
+        aspect_polarity_length_enhancement = layers.Dense(1, activation='sigmoid', name="aspect_polarity_length_enhancement")(max_pool_asc)
         
         csu = CrossSharedUnit(config=self.config, name="cross_shared_unit")([first_ate_dropout, first_asc_dropout])
         
@@ -115,10 +125,18 @@ class Coextractor(object):
         # asc_crf = CRF(self.config.n_polarity_tags)(second_asc_dropout)
         ate_dense = layers.Dense(5, activation='softmax', name="ate_output")(second_ate_dropout)
         asc_dense = layers.Dense(3, activation='softmax', name="asc_output")(second_asc_dropout)
-
-        self.model = Model(inputs=input, outputs=[ate_dense, asc_dense, sentiment_lexicon_enhancement])
+        
+        losses = {
+            'ate_output': 'categorical_crossentropy',
+            'asc_output': 'categorical_crossentropy',
+            'sentiment_lexicon_enhancement': 'categorical_crossentropy',
+            'aspect_term_length_enhancement': 'mean_squared_error',
+            'aspect_polarity_length_enhancement': 'mean_squared_error'
+        }
+        
+        self.model = Model(inputs=input, outputs=[ate_dense, asc_dense, sentiment_lexicon_enhancement, aspect_term_length_enhancement, aspect_polarity_length_enhancement])
         self.model.compile(optimizer='nadam',
-        loss='categorical_crossentropy',
+        loss=losses,
         metrics=['accuracy'])
     
     def train(self, X_train, y_train, X_val, y_val):
@@ -159,10 +177,6 @@ class Coextractor(object):
                     y2.append('PO')
                 elif yasc_pred[j] == 2:
                     y2.append('NG')
-                elif yasc_pred[j] == 3:
-                    y2.append('NT')
-                elif yasc_pred[j] == 4:
-                    y2.append('CF')
 
             y.append([y1, y2])
         return y

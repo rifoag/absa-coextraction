@@ -23,7 +23,7 @@ if __name__ == "__main__":
     X_test, y_test = load_data(test_data)
     sentences = X_test
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.25, random_state=42)
-    
+
     feature_extractor = FeatureExtractor(general_embedding_model, domain_embedding_model, general_dim=config.dim_general, domain_dim=config.dim_domain)
 
     X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', config=config)
@@ -33,6 +33,7 @@ if __name__ == "__main__":
     X_val, y_val2 = prep_train_data(X_val, y_val, feature_extractor, feature='double_embedding', config=config)
     coextractor = Coextractor(config)
     coextractor.init_model()
+    
     print(coextractor.model.summary())
     print('TRAIN:')
     start_time = time.time()

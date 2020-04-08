@@ -29,6 +29,11 @@ def load_lexicon(filename):
                 mpqa_lexicon[token] = subjectivity
     return mpqa_lexicon
 
+def normalize_term_average_lengths(terms_average_lengths):
+    max_el = max(terms_average_lengths)
+    min_el = min(terms_average_lengths)
+    return [[(x-min_el)/(max_el-min_el)] for x in terms_average_lengths]
+
 def get_auxiliary_labels(x, y, mpqa_lexicon, max_len):
     subjectivities, aspect_term_average_lengths, polarity_average_lengths = [], [], []
     
@@ -63,6 +68,8 @@ def get_auxiliary_labels(x, y, mpqa_lexicon, max_len):
         aspect_term_average_lengths.append(get_aspect_term_average_length(asp_sent_labels))
         polarity_average_lengths.append(get_polarity_average_length(polarities))
     
+    aspect_term_average_lengths = normalize_term_average_lengths(aspect_term_average_lengths)
+    polarity_average_lengths = normalize_term_average_lengths(polarity_average_lengths)
     return subjectivities, aspect_term_average_lengths, polarity_average_lengths
 
 def get_aspect_term_average_length(labels):
@@ -197,4 +204,4 @@ def prep_train_data(X, y, feature_extractor, feature='double_embedding', config=
     X_train = feature_extractor.get_features(X, feature, max_len)
     y_asp_sent, y_polarity = get_labels(y, max_len)
     y_mpqa, y_ate_avg_lengths, y_asc_avg_lengths = get_auxiliary_labels(X, y, config.mpqa_lexicon, config.max_sentence_size)
-    return np.asarray(X_train), [np.asarray(y_asp_sent), np.asarray(y_polarity), np.asarray(y_mpqa)]
+    return np.asarray(X_train), [np.asarray(y_asp_sent), np.asarray(y_polarity), np.asarray(y_mpqa), np.asarray(y_ate_avg_lengths), np.asarray(y_asc_avg_lengths)]
