@@ -27,8 +27,6 @@ if __name__ == "__main__":
     feature_extractor = FeatureExtractor(general_embedding_model, domain_embedding_model, general_dim=config.dim_general, domain_dim=config.dim_domain)
 
     X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', config=config)
-    print(y_train[0][0])
-    print("AAAA")
     
     X_test = feature_extractor.get_features(X_test, max_len=config.max_sentence_size)
     X_val2 = feature_extractor.get_features(X_val, max_len=config.max_sentence_size)
