@@ -112,7 +112,7 @@ class Coextractor(object):
         # ate_crf = CRF(self.config.n_aspect_tags)(second_ate_dropout)
         # asc_crf = CRF(self.config.n_polarity_tags)(second_asc_dropout)
         ate_dense = layers.Dense(5, activation='softmax')(second_ate_dropout)
-        asc_dense = layers.Dense(5, activation='softmax')(second_asc_dropout)
+        asc_dense = layers.Dense(3, activation='softmax')(second_asc_dropout)
 
         self.model = Model(inputs=input, outputs=[ate_dense, asc_dense])
         self.model.compile(optimizer='nadam',

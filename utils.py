@@ -157,20 +157,20 @@ def get_labels(y, max_len):
             if i >= max_len:
                 break
             if polarity == 'O':
-                yp.append([1, 0, 0, 0, 0])
+                yp.append([1, 0, 0])
             elif polarity == 'PO':
-                yp.append([0, 1, 0, 0, 0])
+                yp.append([0, 1, 0])
             elif polarity == 'NG':
-                yp.append([0, 0, 1, 0, 0])
-            elif polarity == 'NT':
-                yp.append([0, 0, 0, 1, 0])
-            elif polarity == 'CF':
-                yp.append([0, 0, 0, 0, 1])
+                yp.append([0, 0, 1])
+#             elif polarity == 'NT':
+#                 yp.append([0, 0, 0, 1, 0])
+#             elif polarity == 'CF':
+#                 yp.append([0, 0, 0, 0, 1])
             i += 1
         
         for j in range(len(asp_sent_labels), max_len):
             ya.append([1, 0, 0, 0, 0])
-            yp.append([1, 0, 0, 0, 0])
+            yp.append([1, 0, 0])
         
         y_asp_sent.append(ya)
         y_polarity.append(yp)
