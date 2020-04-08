@@ -195,9 +195,7 @@ def prep_train_data(X, y, feature_extractor, feature='double_embedding', config=
         max_len = config.max_sentence_size
     else:
         max_len = None
-    # X_train = feature_extractor.get_features(X, feature, max_len)
-    X_train = []
+    X_train = feature_extractor.get_features(X, feature, max_len)
     y_asp_sent, y_polarity = get_labels(y, max_len)
 
-    
     return np.asarray(X_train), [np.asarray(y_asp_sent), np.asarray(y_polarity)]

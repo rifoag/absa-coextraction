@@ -16,10 +16,10 @@ class Config(object):
         
         # hyperparameter
         self.batch_size = 4
-        self.epoch = 15
+        self.epoch = 3
         self.patience = 1
         self.verbose = 1
 
         # derivative variable
-        self.max_sentence_size = 35
+        self.max_sentence_size = 40
         self.max_word_size = None
