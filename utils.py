@@ -58,7 +58,7 @@ def get_auxiliary_labels(x, y, mpqa_lexicon, max_len):
                 subj_in_sentence.append([1, 0, 0])
             i += 1
         
-        for j in range(len(sentence), max_len):
+        for j in range(len(subj_in_sentence), max_len):
             subj_in_sentence.append([1, 0, 0])
         
         subjectivities.append(subj_in_sentence)

@@ -18,8 +18,8 @@ class Config(object):
         
         # hyperparameter
         self.batch_size = 4
-        self.epoch = 3
-        self.patience = 1
+        self.epoch = 15
+        self.patience = 3
         self.verbose = 1
 
         # derivative variable

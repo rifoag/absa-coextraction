@@ -10,8 +10,8 @@ import time
 
 
 if __name__ == "__main__":
-    train_data = 'dataset/annotated/train_small.txt'
-    test_data = 'dataset/annotated/test_small.txt'
+    train_data = 'dataset/annotated/train_326.txt'
+    test_data = 'dataset/annotated/test_324.txt'
     mpqa_lexicon_data = 'dataset/annotated/mpqa_lexicon.txt'
     general_embedding_model = '../word_embedding/general_embedding/general_embedding_300.model'
     domain_embedding_model = '../word_embedding/domain_embedding/domain_embedding_100.model'
@@ -19,7 +19,6 @@ if __name__ == "__main__":
     config.mpqa_lexicon = load_lexicon(mpqa_lexicon_data)
     
     X, y = load_data(train_data)
-    X, y = X[:64], y[:64]
     X_test, y_test = load_data(test_data)
     sentences = X_test
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.25, random_state=42)
@@ -31,6 +30,7 @@ if __name__ == "__main__":
     X_test = feature_extractor.get_features(X_test, max_len=config.max_sentence_size)
     X_val2 = feature_extractor.get_features(X_val, max_len=config.max_sentence_size)
     X_val, y_val2 = prep_train_data(X_val, y_val, feature_extractor, feature='double_embedding', config=config)
+    
     coextractor = Coextractor(config)
     coextractor.init_model()
     

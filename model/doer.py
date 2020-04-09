@@ -2,8 +2,8 @@ from tensorflow.keras import layers, Model
 from tensorflow.keras.models import load_model, save_model
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow import initializers
-from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
-from seqeval.metrics import classification_report, performance_measure
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, classification_report
+# from seqeval.metrics import classification_report, performance_measure
 import numpy as np
 import tensorflow.keras.backend as K
 import tensorflow as tf
@@ -150,7 +150,7 @@ class Coextractor(object):
 
     def predict(self, X, y_true):
         y = []
-        yate_scores, yasc_scores, lexicon_enhancement_scores = self.model.predict(np.asarray(X), batch_size=self.config.batch_size)
+        yate_scores, yasc_scores, lexicon_enhancement_scores, aspect_term_length_enhancement_scores, aspect_polarity_length_enhancement_scores = self.model.predict(np.asarray(X), batch_size=self.config.batch_size)
         
         for i in range(len(X)):
             yate_pred = np.argmax(yate_scores[i], 1)
@@ -186,7 +186,7 @@ class Coextractor(object):
 
     def load(self, filename, X_train, y_train):
         self.init_model()
-        self.model.train_on_batch(X_train[:1], [y_train[0][:1], y_train[1][:1]])
+        self.model.fit(X_train[:4], [y_train[0][:4], y_train[1][:4], y_train[2][:4], y_train[3][:4], y_train[4][:4]], batch_size=self.config.batch_size, epochs=1)
         self.model.load_weights(filename)
 
         return self
@@ -248,17 +248,23 @@ class Coextractor(object):
                 elif seq[1][i] == 'CF':
                     y_pred_asc.append(4)
         
+        true_ate_label_seq = [x[0][:self.config.max_sentence_size] for x in y]
+        true_asc_label_seq = [x[1][:self.config.max_sentence_size] for x in y]
+            
+        pred_ate_label_seq = [x[0][:self.config.max_sentence_size] for x in y_pred]
+        pred_asc_label_seq = [x[1][:self.config.max_sentence_size] for x in y_pred]
+            
         self.print_evaluations("Aspect and Sentiment Term Extraction", y_true_ate, y_pred_ate)
-#         self.print_report(y[0], y_pred[0])
-#         if sentences != None:
-#             self.get_wrong_predictions(y[0], y_pred[0], sentences)
+        target_names_ate = ['O', 'B-ASPECT', 'I-ASPECT', 'B-SENTIMENT', 'I-SENTIMENT']
+        print(classification_report(y_true_ate, y_pred_ate, target_names=target_names_ate))
+        if sentences != None:
+            self.get_wrong_predictions(true_ate_label_seq, pred_ate_label_seq, sentences)
             
         self.print_evaluations("Aspect Sentiment Classification", y_true_asc, y_pred_asc)
-        print(y[0])
-        print(y[1])
-#         self.print_report(y[1], y_pred[1])
-#         if sentences != None:
-#             self.get_wrong_predictions(y[1], y_pred[1], sentences)
+        target_names_asc = ['O', 'PO', 'NG']
+        print(classification_report(y_true_asc, y_pred_asc, target_names=target_names_asc))
+        if sentences != None:
+            self.get_wrong_predictions(true_asc_label_seq, pred_asc_label_seq, sentences)
 
     
     def print_evaluations(self, task_name, y_true, y_pred):
@@ -277,11 +283,7 @@ class Coextractor(object):
         print("F1-score:")
         print("weighted : ", f1_score(y_true, y_pred, average='weighted'))
         print("macro : ", f1_score(y_true, y_pred, average='macro'))
-    
-    def print_report(self, y_true, y_pred):
-        print(classification_report(y_true, y_pred))
-        print(performance_measure(y_true, y_pred))
-        
+            
         
     def get_wrong_predictions(self, y, y_pred, sentences):
         count = 0
