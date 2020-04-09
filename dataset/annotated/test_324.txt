@@ -796,7 +796,7 @@ tidak	B-SENTIMENT	O
 ramah	I-SENTIMENT	O
 .	O	O
 
-kamar	B-ASPECT	O
+kamar	B-ASPECT	PO
 nya	I-ASPECT	PO
 nyaman	B-SENTIMENT	O
 dengan	O	O
@@ -1662,7 +1662,7 @@ dapat	O	O
 diskon	O	O
 ,	O	O
 kamar	B-ASPECT	PO
-bersih	B-SENTIMENT	PO
+bersih	B-SENTIMENT	O
 ,	O	O
 ac	B-ASPECT	PO
 dan	O	O
@@ -4554,7 +4554,7 @@ kurang	B-SENTIMENT	O
 bersih	I-SENTIMENT	O
 ,	O	O
 petugas	B-ASPECT	NG
-hotel	I-ASPECT	O
+hotel	I-ASPECT	NG
 juga	O	O
 kurang	B-SENTIMENT	O
 ramah	I-SENTIMENT	O
@@ -8521,7 +8521,7 @@ kecil	B-SENTIMENT	O
 ,	O	O
 tidak	B-SENTIMENT	O
 disediakan	I-SENTIMENT	O
-air	B-ASPECT	O
+air	B-ASPECT	NG
 minum	I-ASPECT	NG
 .	O	O
 ada	O	O
@@ -8563,7 +8563,7 @@ dingin	O	O
 euy	O	O
 .	O	O
 untuk	O	O
-tempat	B-ASPECT	O
+tempat	B-ASPECT	PO
 tidur	I-ASPECT	PO
 sih	O	O
 bagus	B-SENTIMENT	O
@@ -8875,10 +8875,10 @@ nya	I-ASPECT	PO
 strategis	B-SENTIMENT	O
 .	O	O
 
-hotelnya	B-ASPECT	PO
-biasa	B-SENTIMENT	NG
-biasa	I-SENTIMENT	NG
-saja	I-SENTIMENT	NG
+hotelnya	B-ASPECT	NG
+biasa	B-SENTIMENT	O
+biasa	I-SENTIMENT	O
+saja	I-SENTIMENT	O
 ,	O	O
 sesuai	O	O
 budget	O	O
@@ -9072,12 +9072,12 @@ ramah	B-SENTIMENT	O
 kebersihan	B-ASPECT	PO
 dan	O	O
 kenyamanan	B-ASPECT	PO
-kamar	I-ASPECT	O
+kamar	I-ASPECT	PO
 sangat	B-SENTIMENT	O
 bagus	I-SENTIMENT	O
 ,	O	O
 untuk	O	O
-sarapan	B-ASPECT	O
+sarapan	B-ASPECT	PO
 pagi	I-ASPECT	PO
 standar	B-SENTIMENT	O
 .	O	O
@@ -9259,7 +9259,7 @@ dingin	I-SENTIMENT	O
 berisik	B-SENTIMENT	O
 .	O	O
 
-ruangan	B-ASPECT	O
+ruangan	B-ASPECT	PO
 unik	B-SENTIMENT	O
 ,	O	O
 minimalis	B-SENTIMENT	O
@@ -9361,7 +9361,7 @@ kolam	O	O
 renangnya	O	O
 .	O	O
 sayang	O	O
-menu	B-ASPECT	O
+menu	B-ASPECT	NG
 sarapan	I-ASPECT	NG
 kurang	B-SENTIMENT	O
 bervariasi	I-SENTIMENT	O
@@ -12089,7 +12089,7 @@ tetapi	O	O
 nikmat	B-SENTIMENT	O
 blower	B-ASPECT	NG
 kamar	I-ASPECT	NG
-mandi	I-ASPECT	O
+mandi	I-ASPECT	NG
 tidak	B-SENTIMENT	O
 berfungsi	I-SENTIMENT	O
 .	O	O
@@ -14091,7 +14091,7 @@ ramah	B-SENTIMENT	O
 .	O	O
 
 over	B-ASPECT	PO
-all	I-ASPECT	O
+all	I-ASPECT	PO
 ,	O	O
 suka	B-SENTIMENT	O
 banget	I-SENTIMENT	O
@@ -14166,9 +14166,9 @@ sangat	B-SENTIMENT	O
 baik	I-SENTIMENT	O
 .	O	O
 
-tidak	B-SENTIMENT	NG
-ada	I-SENTIMENT	NG
-cemilannya	B-ASPECT	O
+tidak	B-SENTIMENT	O
+ada	I-SENTIMENT	O
+cemilannya	B-ASPECT	NG
 dan	O	O
 ruangannya	O	O
 tidak	B-SENTIMENT	O

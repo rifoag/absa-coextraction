@@ -2865,7 +2865,7 @@ mata	O
 matahari	O
 mataram	O
 math	O
-mati	O
+mati	NG
 matimati	O
 matras	O
 matur	O
