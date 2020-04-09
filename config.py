@@ -1,6 +1,8 @@
 import os
 class Config(object):
     def __init__(self):
+        self.mpqa_lexicon = None
+        
         self.dim_domain = 100
         self.dim_general = 300
         
@@ -17,9 +19,9 @@ class Config(object):
         # hyperparameter
         self.batch_size = 4
         self.epoch = 15
-        self.patience = 1
+        self.patience = 3
         self.verbose = 1
 
         # derivative variable
-        self.max_sentence_size = 35
+        self.max_sentence_size = 40
         self.max_word_size = None

@@ -2,8 +2,8 @@ from tensorflow.keras import layers, Model
 from tensorflow.keras.models import load_model, save_model
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow import initializers
-from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
-from seqeval.metrics import classification_report, performance_measure
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, classification_report
+# from seqeval.metrics import classification_report, performance_measure
 import numpy as np
 import tensorflow.keras.backend as K
 import tensorflow as tf
@@ -19,45 +19,59 @@ class Coextractor(object):
     
     def init_model(self):
         input_shape = self.config.dim_general + self.config.dim_domain
-        input = layers.Input(shape=(None, input_shape))
+        input = layers.Input(shape=(None, input_shape), name="input")
 
         # first RNN layer
         if self.config.rnn_cell == 'regu':
             first_ate_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True),
-                      return_sequences=True))(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
+                      return_sequences=True), name="first_ate_rnn")(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
             first_asc_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True),
-                      return_sequences=True))(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
+                      return_sequences=True), name="first_asc_rnn")(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
         elif self.config.rnn_cell == 'lstm':
             first_ate_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=self.config.dropout_rate))(input)
+                                                    dropout=self.config.dropout_rate), name="first_ate_rnn")(input)
             first_asc_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=self.config.dropout_rate))(input)
+                                                    dropout=self.config.dropout_rate), name="first_asc_rnn")(input)
         elif self.config.rnn_cell == 'gru':
             first_ate_rnn = layers.Bidirectional(layers.GRU(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=self.config.dropout_rate))(input)
+                                                    dropout=self.config.dropout_rate), name="first_ate_rnn")(input)
             first_asc_rnn = layers.Bidirectional(layers.GRU(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=self.config.dropout_rate))(input)
+                                                    dropout=self.config.dropout_rate), name="first_asc_rnn")(input)
         
-        first_ate_dropout = layers.Dropout(self.config.dropout_rate)(first_ate_rnn)
-        first_asc_dropout = layers.Dropout(self.config.dropout_rate)(first_asc_rnn)
-
-        csu = CrossSharedUnit(config=self.config)([first_ate_dropout, first_asc_dropout])
+        first_ate_dropout = layers.Dropout(self.config.dropout_rate, name="first_ate_dropout")(first_ate_rnn)
+        first_asc_dropout = layers.Dropout(self.config.dropout_rate, name="first_asc_dropout")(first_asc_rnn)
+        
+        def max_pooling_layer(input_tensor):
+            return tf.reduce_max(input_tensor, axis=-2)
+        def max_pooling_layer_output_shape(shape):
+            return (shape[0], shape[2])
+        
+        # auxiliary tasks
+        sentiment_lexicon_enhancement = layers.Dense(3, activation='softmax', name="sentiment_lexicon_enhancement")(first_asc_dropout)
+        
+        max_pool_ate = layers.Lambda(max_pooling_layer, output_shape=max_pooling_layer_output_shape, name="max_pool_ate")(first_ate_rnn)
+        aspect_term_length_enhancement = layers.Dense(1, activation='sigmoid', name="aspect_term_length_enhancement")(max_pool_ate)
+        
+        max_pool_asc = layers.Lambda(max_pooling_layer, output_shape=max_pooling_layer_output_shape, name="max_pool_asc")(first_asc_rnn)
+        aspect_polarity_length_enhancement = layers.Dense(1, activation='sigmoid', name="aspect_polarity_length_enhancement")(max_pool_asc)
+        
+        csu = CrossSharedUnit(config=self.config, name="cross_shared_unit")([first_ate_dropout, first_asc_dropout])
         
         def split_layer_left(input_tensor):
             return input_tensor[0]
@@ -74,55 +88,61 @@ class Coextractor(object):
         
         # second RNN layer
         if self.config.rnn_cell == 'regu':
-            second_ate_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True),
-                      return_sequences=True))(split_ate, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
-            second_asc_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True),
-                      return_sequences=True))(split_asc, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
+            second_ate_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True), return_sequences=True), name="second_ate_rnn")(split_ate, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
+            second_asc_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True), return_sequences=True), name="second_asc_rnn")(split_asc, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
         elif self.config.rnn_cell == 'lstm':
             second_ate_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=self.config.dropout_rate))(split_ate)
+                                                    dropout=self.config.dropout_rate), name="second_ate_rnn")(split_ate)
             second_asc_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=self.config.dropout_rate))(split_asc)
+                                                    dropout=self.config.dropout_rate), name="second_asc_rnn")(split_asc)
         elif self.config.rnn_cell == 'gru':
             second_ate_rnn = layers.Bidirectional(layers.GRU(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=self.config.dropout_rate))(split_ate)
+                                                    dropout=self.config.dropout_rate), name="second_ate_rnn")(split_ate)
             second_asc_rnn = layers.Bidirectional(layers.GRU(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
                                                     return_sequences=True,
                                                     kernel_initializer=initializers.RandomUniform(-0.2, 0.2),
                                                     recurrent_initializer=initializers.RandomUniform(-0.2, 0.2),
-                                                    dropout=self.config.dropout_rate))(split_asc)
+                                                    dropout=self.config.dropout_rate), name="second_asc_rnn")(split_asc)
         
-        second_ate_dropout = layers.Dropout(self.config.dropout_rate)(second_ate_rnn)
-        second_asc_dropout = layers.Dropout(self.config.dropout_rate)(second_asc_rnn)
+        second_ate_dropout = layers.Dropout(self.config.dropout_rate, name="second_ate_dropout")(second_ate_rnn)
+        second_asc_dropout = layers.Dropout(self.config.dropout_rate, name="second_asc_dropout")(second_asc_rnn)
 
         # interface layer
         # ate_crf = CRF(self.config.n_aspect_tags)(second_ate_dropout)
         # asc_crf = CRF(self.config.n_polarity_tags)(second_asc_dropout)
-        ate_dense = layers.Dense(5, activation='softmax')(second_ate_dropout)
-        asc_dense = layers.Dense(5, activation='softmax')(second_asc_dropout)
-
-        self.model = Model(inputs=input, outputs=[ate_dense, asc_dense])
+        ate_dense = layers.Dense(5, activation='softmax', name="ate_output")(second_ate_dropout)
+        asc_dense = layers.Dense(3, activation='softmax', name="asc_output")(second_asc_dropout)
+        
+        losses = {
+            'ate_output': 'categorical_crossentropy',
+            'asc_output': 'categorical_crossentropy',
+            'sentiment_lexicon_enhancement': 'categorical_crossentropy',
+            'aspect_term_length_enhancement': 'mean_squared_error',
+            'aspect_polarity_length_enhancement': 'mean_squared_error'
+        }
+        
+        self.model = Model(inputs=input, outputs=[ate_dense, asc_dense, sentiment_lexicon_enhancement, aspect_term_length_enhancement, aspect_polarity_length_enhancement])
         self.model.compile(optimizer='nadam',
-        loss='categorical_crossentropy',
+        loss=losses,
         metrics=['accuracy'])
     
-    def train(self, X_train, y_train):
+    def train(self, X_train, y_train, X_val, y_val):
         es = EarlyStopping(monitor='loss', mode='min', patience=self.config.patience)
         mc = ModelCheckpoint('/output/model_doer', monitor='loss', mode='min', save_best_only=True, save_weights_only=True)
-        self.model.fit(X_train, y_train,
+        self.model.fit(X_train, y_train, validation_data=(X_val, y_val),
                        batch_size=self.config.batch_size,
                        epochs=self.config.epoch,
                        verbose=self.config.verbose,
@@ -130,7 +150,7 @@ class Coextractor(object):
 
     def predict(self, X, y_true):
         y = []
-        yate_scores, yasc_scores = self.model.predict(np.asarray(X), batch_size=self.config.batch_size)
+        yate_scores, yasc_scores, lexicon_enhancement_scores, aspect_term_length_enhancement_scores, aspect_polarity_length_enhancement_scores = self.model.predict(np.asarray(X), batch_size=self.config.batch_size)
         
         for i in range(len(X)):
             yate_pred = np.argmax(yate_scores[i], 1)
@@ -157,10 +177,6 @@ class Coextractor(object):
                     y2.append('PO')
                 elif yasc_pred[j] == 2:
                     y2.append('NG')
-                elif yasc_pred[j] == 3:
-                    y2.append('NT')
-                elif yasc_pred[j] == 4:
-                    y2.append('CF')
 
             y.append([y1, y2])
         return y
@@ -170,7 +186,7 @@ class Coextractor(object):
 
     def load(self, filename, X_train, y_train):
         self.init_model()
-        self.model.train_on_batch(X_train[:1], [y_train[0][:1], y_train[1][:1]])
+        self.model.fit(X_train[:4], [y_train[0][:4], y_train[1][:4], y_train[2][:4], y_train[3][:4], y_train[4][:4]], batch_size=self.config.batch_size, epochs=1)
         self.model.load_weights(filename)
 
         return self
@@ -232,17 +248,23 @@ class Coextractor(object):
                 elif seq[1][i] == 'CF':
                     y_pred_asc.append(4)
         
+        true_ate_label_seq = [x[0][:self.config.max_sentence_size] for x in y]
+        true_asc_label_seq = [x[1][:self.config.max_sentence_size] for x in y]
+            
+        pred_ate_label_seq = [x[0][:self.config.max_sentence_size] for x in y_pred]
+        pred_asc_label_seq = [x[1][:self.config.max_sentence_size] for x in y_pred]
+            
         self.print_evaluations("Aspect and Sentiment Term Extraction", y_true_ate, y_pred_ate)
-#         self.print_report(y[0], y_pred[0])
-#         if sentences != None:
-#             self.get_wrong_predictions(y[0], y_pred[0], sentences)
+        target_names_ate = ['O', 'B-ASPECT', 'I-ASPECT', 'B-SENTIMENT', 'I-SENTIMENT']
+        print(classification_report(y_true_ate, y_pred_ate, target_names=target_names_ate))
+        if sentences != None:
+            self.get_wrong_predictions(true_ate_label_seq, pred_ate_label_seq, sentences)
             
         self.print_evaluations("Aspect Sentiment Classification", y_true_asc, y_pred_asc)
-        print(y[0])
-        print(y[1])
-#         self.print_report(y[1], y_pred[1])
-#         if sentences != None:
-#             self.get_wrong_predictions(y[1], y_pred[1], sentences)
+        target_names_asc = ['O', 'PO', 'NG']
+        print(classification_report(y_true_asc, y_pred_asc, target_names=target_names_asc))
+        if sentences != None:
+            self.get_wrong_predictions(true_asc_label_seq, pred_asc_label_seq, sentences)
 
     
     def print_evaluations(self, task_name, y_true, y_pred):
@@ -261,11 +283,7 @@ class Coextractor(object):
         print("F1-score:")
         print("weighted : ", f1_score(y_true, y_pred, average='weighted'))
         print("macro : ", f1_score(y_true, y_pred, average='macro'))
-    
-    def print_report(self, y_true, y_pred):
-        print(classification_report(y_true, y_pred))
-        print(performance_measure(y_true, y_pred))
-        
+            
         
     def get_wrong_predictions(self, y, y_pred, sentences):
         count = 0
