@@ -67102,3 +67102,4 @@ pelayanan	B-ASPECT	PO
 yang	O	O
 baik	B-SENTIMENT	O
 .	O	O
+
