@@ -191,7 +191,7 @@ class Coextractor(object):
 
         return self
     
-    def evaluate(self, X, y, sentences):
+    def evaluate(self, X, y, sentences=None):
         y_pred = self.predict(X, y)
         y_true_ate = []
         y_pred_ate = []

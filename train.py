@@ -10,7 +10,7 @@ import time
 
 
 if __name__ == "__main__":
-    train_data = 'dataset/annotated/train_326.txt'
+    train_data = 'dataset/annotated/train_409.txt'
     test_data = 'dataset/annotated/test_324.txt'
     mpqa_lexicon_data = 'dataset/annotated/mpqa_lexicon.txt'
     general_embedding_model = '../word_embedding/general_embedding/general_embedding_300.model'

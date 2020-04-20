@@ -9,7 +9,7 @@ from config import Config
 import time
 
 if __name__ == "__main__":
-    train_data = 'dataset/annotated/train_326.txt'
+    train_data = 'dataset/annotated/train_409.txt'
     test_data = 'dataset/annotated/test_324.txt'
     mpqa_lexicon_data = 'dataset/annotated/mpqa_lexicon.txt'
     general_embedding_model = '../word_embedding/general_embedding/general_embedding_300.model'
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     X_test, y_test = load_data(test_data)
     
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.25, random_state=42)
-    sentences = X_train
+    sentences = X_val
     
     feature_extractor = FeatureExtractor(general_embedding_model, domain_embedding_model, general_dim=config.dim_general, domain_dim=config.dim_domain)
 
@@ -34,5 +34,6 @@ if __name__ == "__main__":
     coextractor = Coextractor(config)
     coextractor.load("model_weights_402", X_train, y_train2)
     print(coextractor.model.summary())
-    np.random.seed(55)
-    coextractor.evaluate(X_train, y_train, sentences)
+    np.random.seed(42)
+    coextractor.evaluate(X_test, y_test)
+#     coextractor.evaluate(X_val2, y_val, sentences)
