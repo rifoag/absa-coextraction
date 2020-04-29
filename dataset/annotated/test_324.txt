@@ -5217,7 +5217,7 @@ air	B-ASPECT	NG
 hangatnya	I-ASPECT	NG
 saja	O	O
 suka	B-SENTIMENT	O
-ada	O	I-SENTIMENT
+ada	I-SENTIMENT	O
 suka	I-SENTIMENT	O
 tidak	I-SENTIMENT	O
 jadi	O	O
