@@ -10,6 +10,7 @@ import time
 
 
 if __name__ == "__main__":
+    np.random.seed(55)
     train_data = 'dataset/annotated/train_409.txt'
     test_data = 'dataset/annotated/test_324.txt'
     mpqa_lexicon_data = 'dataset/annotated/mpqa_lexicon.txt'
@@ -20,7 +21,7 @@ if __name__ == "__main__":
     
     X, y = load_data(train_data)
     X_test, y_test = load_data(test_data)
-    sentences = X_test
+    
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.25, random_state=42)
 
     feature_extractor = FeatureExtractor(general_embedding_model, domain_embedding_model, general_dim=config.dim_general, domain_dim=config.dim_domain)
@@ -33,14 +34,15 @@ if __name__ == "__main__":
     
     coextractor = Coextractor(config)
     coextractor.init_model()
-    
     print(coextractor.model.summary())
+        
     print('TRAIN:')
     start_time = time.time()
-    np.random.seed(42)
     coextractor.train(X_train, y_train, X_val, y_val2)
     finish_time = time.time()
     print('Elapsed time: {}'.format(timedelta(seconds=finish_time-start_time)))
-    coextractor.save('model_weights_402')
-    coextractor.evaluate(X_test, y_test, sentences)
+    
+    coextractor.evaluate(X_val, y_val)
+    coextractor.evaluate(X_test, y_test)
+    coextractor.save('saved_models/model_weights_P1_GRU')
     

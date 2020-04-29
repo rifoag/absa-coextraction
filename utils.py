@@ -141,7 +141,7 @@ def get_polarity_average_length(labels):
 def get_labels(y, max_len):
     y_asp_sent = []
     y_polarity = []
-
+    
     for asp_sent_labels, polarities in y:
         ya = []
         yp = []

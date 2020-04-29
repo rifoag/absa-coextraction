@@ -7,19 +7,21 @@ class Config(object):
         self.dim_general = 300
         
         # model control
-        self.rnn_cell = 'regu'
-        self.do_cross_share = True
-        self.dropout_rate = 0.50
-        self.cross_share_k = 5
+        self.rnn_cell = 'gru'
         self.hidden_size = 300
+        self.cross_share_k = 5
+        self.ate_output_topology = 'same' # value : { 'same', 'diff'}
+        self.do_aul = True
+        self. do_aus = True
+        self.dropout_rate = 0.50 # controlled
         
         # data
         self.max_iter = None
         
         # hyperparameter
         self.batch_size = 4
-        self.epoch = 15
-        self.patience = 3
+        self.epoch = 20
+        self.patience = 5
         self.verbose = 1
 
         # derivative variable

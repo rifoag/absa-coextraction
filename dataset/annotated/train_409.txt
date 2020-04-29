@@ -5951,7 +5951,7 @@ fasilitas	B-ASPECT	NG
 tidak	B-SENTIMENT	O
 seperti	I-SENTIMENT	O
 yang	I-SENTIMENT	O
-di	O	I-SENTIMENT
+di	I-SENTIMENT	O
 foto	I-SENTIMENT	O
 dan	O	O
 tidak	B-SENTIMENT	O
@@ -37761,7 +37761,7 @@ snack	B-ASPECT	NG
 tetapi	O	O
 sampai	O	O
 chekout	O	O
-tidak	B=SENTIMENT	O
+tidak	B-SENTIMENT	O
 ada	I-SENTIMENT	O
 .	O	O
 plus	O	O
@@ -54961,7 +54961,7 @@ kamar	B-ASPECT	PO
 sesuai	B-SENTIMENT	O
 dengan	I-SENTIMENT	O
 yang	I-SENTIMENT	O
-di	O	I-SENTIMENT
+di	I-SENTIMENT	O
 foto	I-SENTIMENT	O
 .	O	O
 complimentary	B-ASPECT	PO
@@ -63119,7 +63119,7 @@ keamanan	B-ASPECT	NG
 nyaa	I-ASPECT	NG
 kurang	B-SENTIMENT	O
 ramah	I-SENTIMENT	O
-terlalu	baca -SENTIMENT	O
+terlalu	B-SENTIMENT	O
 kasaar	I-SENTIMENT	O
 .	O	O
 
@@ -63493,7 +63493,7 @@ mengecewakan	B-SENTIMENT	O
 
 keren	B-SENTIMENT	O
 sekali	I-SENTIMENT	O
-hotel	H-ASPECT	PO
+hotel	B-ASPECT	PO
 ini	O	O
 .	O	O
 
