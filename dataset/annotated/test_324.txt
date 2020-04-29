@@ -773,10 +773,10 @@ kecewa	B-SENTIMENT	O
 sih	O	O
 untuk	O	O
 di	O	O
-harga	B-ASPECT	O
+harga	B-ASPECT	NG
 itu	O	O
 tetapi	O	O
-fasilitas	B-ASPECT	O
+fasilitas	B-ASPECT	NG
 seperti	O	O
 itu	O	O
 ,	O	O
@@ -2571,7 +2571,7 @@ pas	O	O
 dapat	O	O
 kamar	O	O
 yang	O	O
-airnya	B-ASPECT	O
+airnya	B-ASPECT	NG
 mengalir	I-SENTIMENT	O
 terus	I-SENTIMENT	O
 ,	O	O
@@ -2594,7 +2594,7 @@ apek	B-SENTIMENT	O
 ganti	B-SENTIMENT	O
 atau	O	O
 hilangkan	B-SENTIMENT	O
-karpetnya	B-ASPECT	O
+karpetnya	B-ASPECT	NG
 saja	O	O
 mungkin	O	O
 akan	O	O
@@ -2773,7 +2773,7 @@ indomaret	O	O
 .	O	O
 
 dapat	O	O
-kamar	B-ASPECT	O
+kamar	B-ASPECT	PO
 yang	O	O
 benar	B-SENTIMENT	O
 benar	I-SENTIMENT	O
@@ -12931,7 +12931,7 @@ infokan	O	O
 kalau	O	O
 tidak	B-SENTIMENT	O
 ada	I-SENTIMENT	O
-parkir	B-ASPECT	O
+parkir	B-ASPECT	NG
 setelah	O	O
 sudah	O	O
 sampai	O	O
@@ -13800,7 +13800,7 @@ repot	B-SENTIMENT	O
 banyak	B-SENTIMENT	O
 nyamuk	I-SENTIMENT	O
 di	O	O
-lobi	B-ASPECT	O
+lobi	B-ASPECT	NG
 ,	O	O
 lama	O	O
 tunggu	O	O
@@ -14667,11 +14667,11 @@ tamu	O	O
 keluar	O	O
 ,	O	O
 ada	B-SENTIMENT	O
-kulkas	B-ASPECT	O
+kulkas	B-ASPECT	PO
 ,	O	O
 ada	B-SENTIMENT	O
-dapur	B-ASPECT	O
-mini	I-ASPECT	O
+dapur	B-ASPECT	PO
+mini	I-ASPECT	PO
 (	O	O
 meskipun	O	O
 di	O	O

@@ -366,7 +366,7 @@ asian	O
 asin	NG
 asli	PO
 aslinya	O
-asri	O
+asri	PO
 assalamualaikum	O
 asyik	PO
 atap	O
@@ -558,7 +558,7 @@ bel	O
 belain	O
 belakang	O
 belakangnya	O
-belangbelang	O
+belangbelang	NG
 belanja	O
 belbel	O
 beli	O
@@ -581,7 +581,7 @@ bepergian	O
 ber	O
 bera	O
 berada	O
-beragam	O
+beragam	PO
 beraih	O
 beraihkan	O
 berak	O
@@ -808,11 +808,11 @@ box	O
 boy	O
 brand	O
 brankas	O
-brdebu	O
+brdebu	NG
 break	O
 breakfast	O
 breakfastnya	O
-brekelwe	O
+brekelwe	NG
 briliant	PO
 brisik	NG
 brkt	O
@@ -863,8 +863,8 @@ bundaran	O
 bungalow	O
 bungkus	O
 buntu	O
-bunyi	O
-bunyibunyi	O
+bunyi	NG
+bunyibunyi	NG
 bunyikan	O
 buram	NG
 buras	O
@@ -919,8 +919,8 @@ ceboknya	O
 ceceran	O
 cecunguk	NG
 cek	O
-cekatan	O
-cekikikan	O
+cekatan	PO
+cekikikan	NG
 cekin	O
 cekout	O
 celana	O
@@ -1690,7 +1690,7 @@ gelapgelap	NG
 gelas	O
 gelep	NG
 gembok	O
-gemboz	O
+gemboz	NG
 gempa	O
 gemuk	O
 genangan	NG
@@ -1980,7 +1980,7 @@ jaangkrik	O
 jadi	O
 jadikan	O
 jadinya	O
-jadul	O
+jadul	NG
 jadwal	O
 jaga	O
 jagain	O
@@ -2012,7 +2012,7 @@ jarang	O
 jaring	O
 jaringan	O
 jasa	O
-jasul	O
+jasul	NG
 jatah	O
 jatim	O
 jatimpark	O
@@ -2067,8 +2067,8 @@ ju	O
 jual	O
 jualan	O
 juanda	O
-juara	O
-judes	O
+juara	PO
+judes	NG
 jug	O
 juga	O
 jujur	O
@@ -2220,8 +2220,8 @@ keciil	O
 kecil	NG
 kecilkan	O
 keciuman	O
-kecoak	O
-kecoaknya	O
+kecoak	NG
+kecoaknya	NG
 kecoklatan	O
 kecuali	O
 kecut	NG
@@ -2287,8 +2287,8 @@ keluarkan	O
 keluarnya	O
 keluhan	O
 keluruhan	O
-kemahalan	O
-kemahlan	O
+kemahalan	NG
+kemahlan	NG
 kemajuan	O
 kemalaman	O
 kemana	O
@@ -2382,7 +2382,7 @@ kesitu	O
 kesulitan	NG
 kesulitannya	O
 kesusahan	O
-ketagihan	O
+ketagihan	PO
 ketel	O
 ketempat	O
 ketenangan	O
@@ -2524,7 +2524,7 @@ kuah	O
 kualitas	O
 kualitasnya	O
 kuasai	O
-kuat	O
+kuat	PO
 kuburan	O
 kucel	O
 kucing	O
@@ -2591,7 +2591,7 @@ lamaa	NG
 lamalama	O
 laman	O
 lambang	O
-lambat	O
+lambat	NG
 lampu	O
 lampulampu	O
 lampunya	O
@@ -2765,7 +2765,7 @@ mager	O
 maghrib	O
 magrib	O
 mah	O
-mahal	O
+mahal	NG
 mahasiswa	O
 main	O
 maintain	O
@@ -3049,7 +3049,7 @@ menjalankan	O
 menjamu	O
 menjamur	O
 menjangkau	O
-menjangkelkan	O
+menjangkelkan	NG
 menjebak	O
 menjelaskan	O
 menjenguk	O
@@ -3078,7 +3078,7 @@ menyarankan	O
 menyatu	O
 menyebabkan	O
 menyediakan	O
-menyedihkan	O
+menyedihkan	NG
 menyenangkan	PO
 menyengat	O
 menyengkan	PO
@@ -3215,9 +3215,9 @@ muncrat	O
 muncul	O
 mungil	O
 mungkin	O
-muraah	O
-murab	O
-murag	O
+muraah	PO
+murab	PO
+murag	PO
 murah	PO
 murahan	NG
 murahh	PO
@@ -3281,7 +3281,7 @@ ngadep	O
 ngalirnya	O
 ngantuk	O
 nge	O
-ngebutt	O
+ngebutt	PO
 ngecas	O
 ngegantungngegantung	O
 ngeliatin	O
@@ -3365,15 +3365,15 @@ nyapu	O
 nyarinya	O
 nyatai	O
 nyatanya	O
-nyeglek	O
-nyengat	O
+nyeglek	NG
+nyengat	NG
 nyenyak	PO
 nyerap	O
-nyesal	O
+nyesal	NG
 nyew	O
 nyimpan	O
 nyimpen	O
-nyman	O
+nyman	PO
 nyumbat	O
 o	O
 obat	O
@@ -3531,7 +3531,7 @@ pedagang	O
 pedas	O
 peebelanjaan	O
 pegal	NG
-pegalpegal	O
+pegalpegal	NG
 pegas	O
 pegawai	O
 pegawainya	O
@@ -3850,7 +3850,7 @@ pricenya	O
 prima	PO
 prioritas	O
 privasi	O
-private	O
+private	PO
 prltn	O
 prmukaan	O
 prnah	O
@@ -4001,7 +4001,7 @@ relatif	O
 remaja	O
 remang	NG
 remangremang	NG
-rembes	O
+rembes	NG
 rembesan	O
 remote	O
 remotenya	O
@@ -4198,7 +4198,7 @@ saudara	O
 sauna	O
 saur	O
 sawah	O
-sawang	O
+sawang	NG
 saya	O
 sayang	O
 sayangnya	O
@@ -4217,9 +4217,9 @@ sdikit	O
 sdkit	O
 se	O
 searching	O
-seasui	O
+seasui	PO
 seat	O
-seauai	O
+seauai	PO
 sebab	O
 sebabnya	O
 sebagai	O
@@ -4265,7 +4265,7 @@ sedunia	O
 seeing	O
 segala	O
 segalanya	O
-segar	O
+segar	PO
 segera	O
 segi	O
 segitu	O
@@ -4275,7 +4275,7 @@ sehari	O
 seharian	O
 seharus	O
 seharusnya	O
-sehat	O
+sehat	PO
 sehingga	O
 seingat	O
 sejadah	O
@@ -4421,7 +4421,7 @@ sessuai	O
 sesuai	PO
 sesuatu	O
 sesuatunya	O
-sesuia	O
+sesuia	PO
 sesungguhnya	O
 set	O
 setan	O
@@ -4552,7 +4552,7 @@ spechless	PO
 speed	O
 sperma	NG
 sponsor	O
-spooky	O
+spooky	NG
 spot	O
 sprainya	O
 spraynya	O
@@ -4673,7 +4673,7 @@ tahan	O
 tahu	O
 tahun	O
 tai	NG
-takdee	O
+takdee	NG
 taksi	O
 takus	O
 takut	NG
@@ -4737,9 +4737,9 @@ teiliti	O
 tekanan	O
 teko	O
 telah	O
-telaten	O
+telaten	PO
 tele	O
-teledor	O
+teledor	NG
 telepon	O
 televisi	O
 teliti	O
@@ -4853,7 +4853,7 @@ tersedianya	O
 tersendattersendat	O
 tersendiri	O
 tersenyum	PO
-tersumbat	O
+tersumbat	NG
 tertangkap	O
 tertata	O
 tertawa	PO
@@ -4903,7 +4903,7 @@ tiga	O
 tiket	O
 tiketnya	O
 tikungan	O
-tikus	O
+tikus	NG
 tilet	O
 tim	O
 timbul	O
@@ -5099,7 +5099,7 @@ variasinya	O
 variatif	PO
 various	O
 ventilasi	O
-verpasir	O
+verpasir	NG
 very	O
 vetsinnya	O
 via	O
