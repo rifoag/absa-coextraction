@@ -9,6 +9,7 @@ from config import Config
 import time
 
 if __name__ == "__main__":
+    np.random.seed(42)
     train_data = 'dataset/annotated/train_409.txt'
     test_data = 'dataset/annotated/test_324.txt'
     mpqa_lexicon_data = 'dataset/annotated/mpqa_lexicon.txt'
@@ -25,15 +26,15 @@ if __name__ == "__main__":
     
     feature_extractor = FeatureExtractor(general_embedding_model, domain_embedding_model, general_dim=config.dim_general, domain_dim=config.dim_domain)
 
-    X_train, y_train2 = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', config=config)
+    X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', config=config)
     
     X_test = feature_extractor.get_features(X_test, max_len=config.max_sentence_size)
-    X_val2 = feature_extractor.get_features(X_val, max_len=config.max_sentence_size)
     X_val, y_val2 = prep_train_data(X_val, y_val, feature_extractor, feature='double_embedding', config=config)
     
     coextractor = Coextractor(config)
-    coextractor.load("model_weights_402", X_train, y_train2)
+    coextractor.load("saved_models/model_weights_P1_ReGU", X_train, y_train)
     print(coextractor.model.summary())
-    np.random.seed(42)
+    
+    coextractor.evaluate(X_val, y_val)
+    print("Test Data : ")
     coextractor.evaluate(X_test, y_test)
-#     coextractor.evaluate(X_val2, y_val, sentences)

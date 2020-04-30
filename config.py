@@ -7,7 +7,7 @@ class Config(object):
         self.dim_general = 300
         
         # model control
-        self.rnn_cell = 'gru'
+        self.rnn_cell = 'regu'
         self.hidden_size = 300
         self.cross_share_k = 5
         self.ate_output_topology = 'same' # value : { 'same', 'diff'}
@@ -20,7 +20,7 @@ class Config(object):
         
         # hyperparameter
         self.batch_size = 4
-        self.epoch = 20
+        self.epoch = 15
         self.patience = 5
         self.verbose = 1
 

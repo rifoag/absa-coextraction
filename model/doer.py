@@ -121,8 +121,6 @@ class Coextractor(object):
         second_asc_dropout = layers.Dropout(self.config.dropout_rate, name="second_asc_dropout")(second_asc_rnn)
 
         # interface layer
-        # ate_crf = CRF(self.config.n_aspect_tags)(second_ate_dropout)
-        # asc_crf = CRF(self.config.n_polarity_tags)(second_asc_dropout)
         ate_dense = layers.Dense(5, activation='softmax', name="ate_output")(second_ate_dropout)
         asc_dense = layers.Dense(3, activation='softmax', name="asc_output")(second_asc_dropout)
         
@@ -272,17 +270,9 @@ class Coextractor(object):
         print("Confusion Matrix:")
         print(confusion_matrix(y_true, y_pred))
         print()
-        print("Precision:")
-        print("weighted : ", precision_score(y_true, y_pred, average='weighted'))
-        print("average : ", precision_score(y_true, y_pred, average='macro'))
-        print()
-        print("Recall:")
-        print("weighted : ", recall_score(y_true, y_pred, average='weighted'))
-        print("macro : ", recall_score(y_true, y_pred, average='macro'))
-        print()
-        print("F1-score:")
-        print("weighted : ", f1_score(y_true, y_pred, average='weighted'))
-        print("macro : ", f1_score(y_true, y_pred, average='macro'))
+        print("Precision : ", precision_score(y_true, y_pred, average='macro'))
+        print("Recall : ", recall_score(y_true, y_pred, average='macro'))
+        print("F1-score : ", f1_score(y_true, y_pred, average='macro'))
             
         
     def get_wrong_predictions(self, y, y_pred, sentences):

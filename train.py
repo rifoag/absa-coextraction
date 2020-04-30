@@ -29,7 +29,6 @@ if __name__ == "__main__":
     X_train, y_train = prep_train_data(X_train, y_train, feature_extractor, feature='double_embedding', config=config)
     
     X_test = feature_extractor.get_features(X_test, max_len=config.max_sentence_size)
-    X_val2 = feature_extractor.get_features(X_val, max_len=config.max_sentence_size)
     X_val, y_val2 = prep_train_data(X_val, y_val, feature_extractor, feature='double_embedding', config=config)
     
     coextractor = Coextractor(config)
@@ -42,7 +41,7 @@ if __name__ == "__main__":
     finish_time = time.time()
     print('Elapsed time: {}'.format(timedelta(seconds=finish_time-start_time)))
     
-    coextractor.save('saved_models/model_weights_P1_GRU')
+    coextractor.save('saved_models/model_weights_P1_ReGU')
     coextractor.evaluate(X_val, y_val)
     coextractor.evaluate(X_test, y_test)
     
