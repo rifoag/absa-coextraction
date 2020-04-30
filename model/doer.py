@@ -137,14 +137,21 @@ class Coextractor(object):
         loss=losses,
         metrics=['accuracy'])
     
-    def train(self, X_train, y_train, X_val, y_val):
+    def train(self, X_train, y_train, X_val=None, y_val=None):
         es = EarlyStopping(monitor='loss', mode='min', patience=self.config.patience)
         mc = ModelCheckpoint('/output/model_doer', monitor='loss', mode='min', save_best_only=True, save_weights_only=True)
-        self.model.fit(X_train, y_train, validation_data=(X_val, y_val),
-                       batch_size=self.config.batch_size,
-                       epochs=self.config.epoch,
-                       verbose=self.config.verbose,
-                       callbacks=[es])
+        if X_val:
+            self.model.fit(X_train, y_train, validation_data=(X_val, y_val),
+                           batch_size=self.config.batch_size,
+                           epochs=self.config.epoch,
+                           verbose=self.config.verbose,
+                           callbacks=[es])
+        else:
+            self.model.fit(X_train, y_train,
+                           batch_size=self.config.batch_size,
+                           epochs=self.config.epoch,
+                           verbose=self.config.verbose,
+                           callbacks=[es])
 
     def predict(self, X, y_true):
         y = []
@@ -189,7 +196,7 @@ class Coextractor(object):
 
         return self
     
-    def evaluate(self, X, y, sentences=None):
+    def evaluate(self, X, y, sentences=None, print_report=None):
         y_pred = self.predict(X, y)
         y_true_ate = []
         y_pred_ate = []
@@ -253,17 +260,20 @@ class Coextractor(object):
         pred_asc_label_seq = [x[1][:self.config.max_sentence_size] for x in y_pred]
             
         self.print_evaluations("Aspect and Sentiment Term Extraction", y_true_ate, y_pred_ate)
-        target_names_ate = ['O', 'B-ASPECT', 'I-ASPECT', 'B-SENTIMENT', 'I-SENTIMENT']
-        print(classification_report(y_true_ate, y_pred_ate, target_names=target_names_ate))
-        if sentences != None:
+        if print_report:
+            target_names_ate = ['O', 'B-ASPECT', 'I-ASPECT', 'B-SENTIMENT', 'I-SENTIMENT']
+            print(classification_report(y_true_ate, y_pred_ate, target_names=target_names_ate))
+        if sentences:
             self.get_wrong_predictions(true_ate_label_seq, pred_ate_label_seq, sentences)
             
         self.print_evaluations("Aspect Sentiment Classification", y_true_asc, y_pred_asc)
-        target_names_asc = ['O', 'PO', 'NG']
-        print(classification_report(y_true_asc, y_pred_asc, target_names=target_names_asc))
-        if sentences != None:
+        if print_report:
+            target_names_asc = ['O', 'PO', 'NG']
+            print(classification_report(y_true_asc, y_pred_asc, target_names=target_names_asc))
+        if sentences:
             self.get_wrong_predictions(true_asc_label_seq, pred_asc_label_seq, sentences)
 
+        return [f1_score(y_true_ate, y_pred_ate, average='macro'), f1_score(y_true_asc, y_pred_asc, average='macro')]
     
     def print_evaluations(self, task_name, y_true, y_pred):
         print(task_name)
