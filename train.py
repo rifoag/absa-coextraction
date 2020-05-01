@@ -11,8 +11,8 @@ import time
 
 if __name__ == "__main__":
     np.random.seed(42)
-    train_data = 'dataset/annotated/train_409.txt'
-    test_data = 'dataset/annotated/test_324.txt'
+    train_data = 'dataset/annotated/train_4k.txt'
+    test_data = 'dataset/annotated/test_1k.txt'
     mpqa_lexicon_data = 'dataset/annotated/mpqa_lexicon.txt'
     general_embedding_model = '../word_embedding/general_embedding/general_embedding_300.model'
     domain_embedding_model = '../word_embedding/domain_embedding/domain_embedding_100.model'

@@ -24,9 +24,9 @@ class Coextractor(object):
         # first RNN layer
         if self.config.rnn_cell == 'regu':
             first_ate_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True),
-                      return_sequences=True), name="first_ate_rnn")(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
+                      return_sequences=True), name="first_ate_rnn")(input)
             first_asc_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True),
-                      return_sequences=True), name="first_asc_rnn")(input, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
+                      return_sequences=True), name="first_asc_rnn")(input)
         elif self.config.rnn_cell == 'lstm':
             first_ate_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
@@ -88,8 +88,8 @@ class Coextractor(object):
         
         # second RNN layer
         if self.config.rnn_cell == 'regu':
-            second_ate_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True), return_sequences=True), name="second_ate_rnn")(split_ate, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
-            second_asc_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True), return_sequences=True), name="second_asc_rnn")(split_asc, [tf.zeros([self.config.batch_size, self.config.hidden_size]) for i in range(2)])
+            second_ate_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True), return_sequences=True), name="second_ate_rnn")(split_ate)
+            second_asc_rnn = layers.Bidirectional(layers.RNN(ReguCell(hidden_size=self.config.hidden_size, return_sequences=True), return_sequences=True), name="second_asc_rnn")(split_asc)
         elif self.config.rnn_cell == 'lstm':
             second_ate_rnn = layers.Bidirectional(layers.LSTM(self.config.hidden_size,
                                                     recurrent_activation='sigmoid',
@@ -140,19 +140,12 @@ class Coextractor(object):
     def train(self, X_train, y_train, X_val=None, y_val=None):
         es = EarlyStopping(monitor='loss', mode='min', patience=self.config.patience)
         mc = ModelCheckpoint('/output/model_doer', monitor='loss', mode='min', save_best_only=True, save_weights_only=True)
-        if X_val:
-            self.model.fit(X_train, y_train, validation_data=(X_val, y_val),
-                           batch_size=self.config.batch_size,
-                           epochs=self.config.epoch,
-                           verbose=self.config.verbose,
-                           callbacks=[es])
-        else:
-            self.model.fit(X_train, y_train,
-                           batch_size=self.config.batch_size,
-                           epochs=self.config.epoch,
-                           verbose=self.config.verbose,
-                           callbacks=[es])
-
+        self.model.fit(X_train, y_train, validation_data=(X_val, y_val),
+                       batch_size=self.config.batch_size,
+                       epochs=self.config.epoch,
+                       verbose=self.config.verbose,
+                       callbacks=[es])
+        
     def predict(self, X, y_true):
         y = []
         yate_scores, yasc_scores, lexicon_enhancement_scores, aspect_term_length_enhancement_scores, aspect_polarity_length_enhancement_scores = self.model.predict(np.asarray(X), batch_size=self.config.batch_size)

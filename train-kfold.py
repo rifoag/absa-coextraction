@@ -10,8 +10,7 @@ import time
 
 if __name__ == "__main__":
     np.random.seed(42)
-    train_data = 'dataset/annotated/train_small.txt'
-    test_data = 'dataset/annotated/test_small.txt'
+    train_data = 'dataset/annotated/train_5k.txt'
     mpqa_lexicon_data = 'dataset/annotated/mpqa_lexicon.txt'
     general_embedding_model = '../word_embedding/general_embedding/general_embedding_300.model'
     domain_embedding_model = '../word_embedding/domain_embedding/domain_embedding_100.model'
@@ -19,7 +18,6 @@ if __name__ == "__main__":
     config.mpqa_lexicon = load_lexicon(mpqa_lexicon_data)
     
     X, y = load_data(train_data)
-    X, y = X[:64], y[:64]
     feature_extractor = FeatureExtractor(general_embedding_model, domain_embedding_model, general_dim=config.dim_general, domain_dim=config.dim_domain)
     data_size = len(X)
     X, y = np.array(X), np.array(y)
@@ -28,12 +26,13 @@ if __name__ == "__main__":
     f1_scores = []
     start_time = time.time()
     for i in range(5): # 5-fold
+        fold_start_time = time.time()
         print('FOLD ', i+1)
         test_start_index = (data_size/5)*i
         train_index = []
         test_index = []
         for i in range(data_size):
-            if i >= test_start_index and i < test_start_index + 12:
+            if i >= test_start_index and i < test_start_index + data_size/5:
                 test_index.append(i)
             else:
                 train_index.append(i)
@@ -48,9 +47,11 @@ if __name__ == "__main__":
         coextractor = Coextractor(config)
         coextractor.init_model()
         coextractor.train(X_train, y_train)
-        coextractor.save('saved_models/model_weights_P1_ReGU')
+        coextractor.save('saved_models/model_weights_P1_GRU_K_' + str(i))
         f1_scores.append(coextractor.evaluate(X_test, y_test))
-
+        
+        fold_finish_time = time.time()
+        print('Elapsed time: {}'.format(timedelta(seconds=fold_finish_time-fold_start_time)))    
     
     finish_time = time.time()
     ate_scores = []
@@ -60,7 +61,7 @@ if __name__ == "__main__":
         ate_scores.append(score[0])
         print("ASC : ", score[1])
         asc_scores.append(score[1])
-        
+        print()
     print("Average ATE : ", sum(ate_scores)/len(ate_scores))
     print("Average ASC : ", sum(asc_scores)/len(asc_scores))
     

@@ -19,7 +19,7 @@ class Config(object):
         self.max_iter = None
         
         # hyperparameter
-        self.batch_size = 4
+        self.batch_size = 16
         self.epoch = 15
         self.patience = 5
         self.verbose = 1

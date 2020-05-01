@@ -37,7 +37,7 @@ class ReguCell(Layer):
         self.built = True
         super(ReguCell, self).build(input_shape)  # Be sure to call this at the end
 
-    def call(self, inputs, states):
+    def call(self, inputs, states=None):
         c_prev = states[0]
 
         regu_matrix = K.matmul(K.concat([inputs, c_prev], 1), self.wufo)
