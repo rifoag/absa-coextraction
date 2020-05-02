@@ -41,9 +41,9 @@ def write_final(data, labels, filename):
                 tsv_writer.writerow([token, aspect_sentiment_label, polarity_label])
             tsv_writer.writerow([])
 
-data, labels_list = load_data("annotated/train_4k.txt")
-old_data, old_labels_list = load_data("old/train_4k.txt")
+data, labels_list = load_data("annotated/test_1k.txt")
+old_data, old_labels_list = load_data("old/test_1k.txt")
 
 labels = merge_labels(old_labels_list, labels_list)
 
-write_final(data, labels, "train_4k.txt")
+write_final(data, labels, "test_1k.txt")
