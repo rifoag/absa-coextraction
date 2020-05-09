@@ -1,17 +1,23 @@
 from model.doer import Coextractor
 from model.feature_extractor import FeatureExtractor
-from datetime import timedelta
+from config import Config
 from utils import load_data, prep_train_data, load_lexicon
+
 from sklearn.model_selection import train_test_split
+
+from tensorflow.keras.backend import clear_session
 import argparse
 import numpy as np
-from config import Config
 import time
+
+from datetime import timedelta
 
 if __name__ == "__main__":
     np.random.seed(42)
-    train_data = 'dataset/annotated/train_409.txt'
-    test_data = 'dataset/annotated/test_324.txt'
+    clear_session()
+    
+    train_data = 'dataset/train_4k.txt'
+    test_data = 'dataset/test_1k.txt'
     mpqa_lexicon_data = 'dataset/annotated/mpqa_lexicon.txt'
     general_embedding_model = '../word_embedding/general_embedding/general_embedding_300.model'
     domain_embedding_model = '../word_embedding/domain_embedding/domain_embedding_100.model'
@@ -32,9 +38,11 @@ if __name__ == "__main__":
     X_val, y_val2 = prep_train_data(X_val, y_val, feature_extractor, feature='double_embedding', config=config)
     
     coextractor = Coextractor(config)
-    coextractor.load("saved_models/model_weights_P1_ReGU", X_train, y_train)
+    coextractor.load("saved_models/P1_ReGU-P2_Same/P1_ReGU_weights")
     print(coextractor.model.summary())
     
     coextractor.evaluate(X_val, y_val)
-    print("Test Data : ")
-    coextractor.evaluate(X_test, y_test)
+#     print()
+#     print("Test Data : ")
+#     print()
+#     coextractor.evaluate(X_test, y_test)

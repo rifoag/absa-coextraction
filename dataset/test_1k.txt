@@ -1,7 +1,7 @@
 pelayanan	B-ASPECT	PO
 ramah	B-SENTIMENT	O
 ,	O	O
-kamar	O	O
+kamar	B-ASPECT	PO
 nyaman	B-SENTIMENT	O
 dan	O	O
 fasilitas	B-ASPECT	PO
@@ -15562,7 +15562,7 @@ bagus	B-SENTIMENT	O
 tetapi	O	O
 warnanya	B-SENTIMENT	O
 sudah	I-SENTIMENT	O
-jelek	B-SENTIMENT	O
+jelek	I-SENTIMENT	O
 .	O	O
 saran	O	O
 saya	O	O

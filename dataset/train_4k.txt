@@ -784,7 +784,7 @@ hai	O	O
 air	B-ASPECT	NG
 bersih	I-ASPECT	NG
 untuk	O	O
-mck	B-ASPECT	NG
+mck	O	O
 tidak	B-SENTIMENT	O
 ada	I-SENTIMENT	O
 .	O	O
@@ -2600,7 +2600,7 @@ odol	O	O
 sikat	O	O
 )	O	O
 ,	O	O
-handuk	B-ASPECT	    NG
+handuk	B-ASPECT	NG
 ada	O	O
 2	O	O
 tetapi	O	O

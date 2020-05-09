@@ -1,21 +1,26 @@
 from model.doer import Coextractor
 from model.feature_extractor import FeatureExtractor
-from datetime import timedelta
+from config import Config
 from utils import load_data, prep_train_data, load_lexicon
+
 from sklearn.model_selection import train_test_split
+
+from tensorflow.keras.backend import clear_session
 import argparse
 import numpy as np
-from config import Config
 import time
 
+from datetime import timedelta
 
 if __name__ == "__main__":
     np.random.seed(42)
-    train_data = 'dataset/annotated/train_4k.txt'
-    test_data = 'dataset/annotated/test_1k.txt'
+    clear_session()
+    
+    train_data = 'dataset/train_4k.txt'
+    test_data = 'dataset/test_1k.txt'
     mpqa_lexicon_data = 'dataset/annotated/mpqa_lexicon.txt'
-    general_embedding_model = '../word_embedding/general_embedding/general_embedding_300.model'
-    domain_embedding_model = '../word_embedding/domain_embedding/domain_embedding_100.model'
+    general_embedding_model = 'word_embedding/general_embedding/general_embedding_300.model'
+    domain_embedding_model = 'word_embedding/domain_embedding/domain_embedding_100.model'
     config = Config()
     config.mpqa_lexicon = load_lexicon(mpqa_lexicon_data)
     
@@ -39,9 +44,9 @@ if __name__ == "__main__":
     start_time = time.time()
     coextractor.train(X_train, y_train, X_val, y_val2)
     finish_time = time.time()
-    print('Elapsed time: {}'.format(timedelta(seconds=finish_time-start_time)))
     
-    coextractor.save('saved_models/model_weights_P1_ReGU')
+    coextractor.save('saved_models/P4_noaus_weights')
     coextractor.evaluate(X_val, y_val)
-    coextractor.evaluate(X_test, y_test)
+#     coextractor.evaluate(X_test, y_test)
+    print('Elapsed time: {}'.format(timedelta(seconds=finish_time-start_time)))
     
